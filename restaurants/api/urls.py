@@ -15,10 +15,10 @@ Including another URLconf
 """
 
 from django.urls import path
-from .views import get_all_restaurants, get_all_restaurant_dishes, get_all_category_dishes
+from .views import get_all_restaurants, get_all_restaurant_dishes, get_dishes_category
 
 urlpatterns = [
     path('restaurants/all', get_all_restaurants, name="get_all_restaurants"),
     path('dishes/restaurant/<int:pk>', get_all_restaurant_dishes, name="get_all_restaurant dishes"),
-    path('dishes/category/<int:pk>', get_all_category_dishes, name="get_all_restaurant dishes")
+    path('dishes/category/<int:pk>', get_dishes_category, name="get_dishes_category")
 ]
