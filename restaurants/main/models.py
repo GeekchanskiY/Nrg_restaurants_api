@@ -117,5 +117,5 @@ class Review(models.Model):
     customer_name = models.CharField(max_length=255)
     customer_rating = models.IntegerField(default=10, validators=[MaxValueValidator(10), MinValueValidator(1)])
     time = models.DateTimeField(auto_now=True)
-    restaurant = models.ForeignKey(Restaurant)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     is_shown = models.BooleanField(default=False)
