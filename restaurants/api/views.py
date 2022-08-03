@@ -28,6 +28,16 @@ def get_all_restaurant_dishes(request: Request, pk: int):
     dishes = Dish.objects.filter(restaurant__id=pk)
     
     serializer = DishSerializer(dishes, many=True)
-    return Response({"queries": [{"q": q} for q in connection.queries], "query": dishes.query, "dishes": serializer.data},
+    return Response({"dishes": serializer.data},
+                    status=status.HTTP_200_OK)
+
+
+@swagger_auto_schema(method="get", responses={200: DishSerializer(many=True)})
+@api_view(['GET'])
+def get_all_category_dishes(request: Request, pk: int):
+    dishes = Dish.objects.filter(category__id=pk)
+
+    serializer = DishSerializer(dishes, many=True)
+    return Response({"dishes": serializer.data},
                     status=status.HTTP_200_OK)
 
