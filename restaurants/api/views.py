@@ -25,7 +25,6 @@ def get_all_restaurants(request: Request):
 @swagger_auto_schema(method="get", responses={200: DishSerializer(many=True)})
 @api_view(['GET'])
 def get_all_restaurant_dishes(request: Request, pk: int):
-    reset_queries()
     dishes = Dish.objects.filter(restaurant__id=pk)
     
     serializer = DishSerializer(dishes, many=True)
