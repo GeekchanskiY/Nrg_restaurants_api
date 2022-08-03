@@ -63,7 +63,8 @@ class ReviewSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Review
-        fields = ('id', 'customer_email', 'customer_name', 'time', 'customer_rating', 'restaurant_id', 'customer_text')
+        fields = ('id', 'customer_email', 'customer_name', 'time', 'customer_rating_1', 'customer_rating_2',
+                  'customer_rating_3', 'restaurant_id', 'customer_text')
 
     def create(self, validated_data):
         restaurant = validated_data.pop("restaurant")
