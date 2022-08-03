@@ -16,12 +16,13 @@ Including another URLconf
 
 from django.urls import path
 from .views import get_all_restaurants, get_all_restaurant_dishes, get_dishes_category, post_restaurant_review,\
-    get_restaurant_reviews
+    get_restaurant_reviews, get_restaurant_dish_sets
 
 urlpatterns = [
     path('restaurants/all', get_all_restaurants, name="get_all_restaurants"),
     path('dishes/restaurant/<int:pk>', get_all_restaurant_dishes, name="get_all_restaurant dishes"),
     path('dishes/category/<int:pk>', get_dishes_category, name="get_dishes_category"),
+    path('dishes/dish_sets/<int:pk>', get_restaurant_dish_sets, name="get_dish_sets"),
     path('reviews/create', post_restaurant_review, name="create_restaurant_review"),
     path('reviews/get/<int:pk>', get_restaurant_reviews, name="get_restaurant_reviews")
 ]
