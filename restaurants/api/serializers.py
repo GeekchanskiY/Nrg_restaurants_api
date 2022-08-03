@@ -1,7 +1,5 @@
-from abc import ABC
-
 from rest_framework import serializers
-from main.models import Restaurant, Dish, DishesCategory, DishSet, RestaurantImageCategory, RestaurantImage
+from main.models import Restaurant, Dish, DishesCategory, DishSet, RestaurantImageCategory, RestaurantImage, Review
 
 
 class RestaurantImageSerializer(serializers.HyperlinkedModelSerializer):
@@ -53,3 +51,13 @@ class DishSetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = DishSet
         fields = ('id', 'name_ru', 'name_en', 'image', 'dishes_set')
+
+
+class ReviewSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.ReadOnlyField()
+    time = serializers.DateTimeField(read_only=True)
+    restaurant = serializers.SlugField(queryset=Restaurant.objects.all(), slug_field='id')
+
+    class Meta:
+        model = Review
+        fields = ('id', 'customer_email', 'customer_name', 'time', 'customer_rating', 'restaurant')
