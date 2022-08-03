@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.html import mark_safe
 from django.core.validators import MaxValueValidator, MinValueValidator
+from datetime import datetime
 
 
 class Restaurant(models.Model):
@@ -115,8 +116,10 @@ class Review(models.Model):
     id = models.AutoField(primary_key=True)
     customer_email = models.EmailField(blank=True, null=True)
     customer_name = models.CharField(max_length=255)
-    customer_rating = models.IntegerField(default=10, validators=[MaxValueValidator(10), MinValueValidator(1)])
-    time = models.DateTimeField(auto_now=True)
+    customer_rating_1 = models.IntegerField(default=10, validators=[MaxValueValidator(10), MinValueValidator(1)])
+    customer_rating_2 = models.IntegerField(default=10, validators=[MaxValueValidator(10), MinValueValidator(1)])
+    customer_rating_3 = models.IntegerField(default=10, validators=[MaxValueValidator(10), MinValueValidator(1)])
+    time = models.DateTimeField(default=datetime.now, blank=True)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     customer_text = models.TextField(null=True, blank=True)
     is_shown = models.BooleanField(default=False)
