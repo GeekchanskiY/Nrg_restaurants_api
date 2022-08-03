@@ -22,6 +22,14 @@ def get_all_restaurants(request: Request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(method="get", responses={200: RestaurantSerializer(many=True)})
+@api_view(['GET'])
+def get_all_restaurants_categories(request: Request):
+    restaurants = Restaurant.objects.all()
+    serializer = RestaurantSerializer(restaurants, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 @swagger_auto_schema(method="get", responses={200: DishSerializer(many=True)})
 @api_view(['GET'])
 def get_all_restaurant_dishes(request: Request, pk: int):
@@ -32,12 +40,12 @@ def get_all_restaurant_dishes(request: Request, pk: int):
                     status=status.HTTP_200_OK)
 
 
-@swagger_auto_schema(method="get", responses={200: DishSerializer(many=True)})
+@swagger_auto_schema(method="get", responses={200: DishesCategorySerializer()})
 @api_view(['GET'])
-def get_all_category_dishes(request: Request, pk: int):
-    dishes = Dish.objects.filter(category__id=pk)
+def get_dishes_category(request: Request, pk: int):
+    dishes_category = DishesCategory.objects.get(id=pk)
 
-    serializer = DishSerializer(dishes, many=True)
+    serializer = DishesCategorySerializer(dishes_category)
     return Response({"dishes": serializer.data},
                     status=status.HTTP_200_OK)
 
