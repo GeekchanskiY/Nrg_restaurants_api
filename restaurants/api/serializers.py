@@ -60,4 +60,4 @@ class ReviewSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Review
-        fields = ('id', 'customer_email', 'customer_name', 'time', 'customer_rating', 'restaurant_id')
+        fields = ('id', 'customer_email', 'customer_name', 'time', 'customer_rating', 'restaurant_id', 'customer_text')
