@@ -56,8 +56,8 @@ class DishSetSerializer(serializers.HyperlinkedModelSerializer):
 class ReviewSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     time = serializers.DateTimeField(read_only=True)
-    restaurant = serializers.PrimaryKeyRelatedField(many=False)
+    restaurant_id = serializers.CharField(source='restaurant.id')
 
     class Meta:
         model = Review
-        fields = ('id', 'customer_email', 'customer_name', 'time', 'customer_rating', 'restaurant')
+        fields = ('id', 'customer_email', 'customer_name', 'time', 'customer_rating', 'restaurant_id')
