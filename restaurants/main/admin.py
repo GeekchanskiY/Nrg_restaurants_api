@@ -7,6 +7,6 @@ from .models import Restaurant
 @admin.register(Restaurant)
 class RestaurantAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
-    fields = 'name'
+    fields = ('name')
     search_fields = ['name']
     
