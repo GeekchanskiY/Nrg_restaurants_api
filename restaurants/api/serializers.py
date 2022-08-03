@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist
 from main.models import Restaurant, Dish, DishesCategory, DishSet, RestaurantImageCategory, RestaurantImage, Review
 
 
@@ -56,8 +58,24 @@ class DishSetSerializer(serializers.HyperlinkedModelSerializer):
 class ReviewSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     time = serializers.DateTimeField(read_only=True)
-    restaurant_id = serializers.PrimaryKeyRelatedField(queryset=Restaurant.objects.all(), source='restaurant.id')
+    restaurant_id = serializers.PrimaryKeyRelatedField(read_only=True, queryset=Restaurant.objects.all(),
+                                                       source='restaurant.id')
 
     class Meta:
         model = Review
         fields = ('id', 'customer_email', 'customer_name', 'time', 'customer_rating', 'restaurant_id', 'customer_text')
+
+    def create(self, validated_data):
+        restaurant_id = validated_data.pop("restaurant_id")
+        try:
+            restaurant = Restaurant.objects.get(id=restaurant_id)
+        except ObjectDoesNotExist:
+            raise ValidationError(detail="Invalid restaurant id")
+
+        review = Review(restaurant=restaurant, **validated_data)
+        review.save()
+        return review
+        
+
+
+        
