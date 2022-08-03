@@ -9,12 +9,26 @@ class Restaurant(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, verbose_name="Название", unique=True)
 
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Ресторан"
+        verbose_name_plural = "Рестораны"
+
 
 class DishesCategory(models.Model):
     id = models.AutoField(primary_key=True)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to="images/dishes_categories/", null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Категория блюд"
+        verbose_name_plural = "Категории блюд"
 
 
 class Dish(models.Model):
@@ -24,6 +38,13 @@ class Dish(models.Model):
     description = models.TextField()
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     category = models.ForeignKey(DishesCategory, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Блюдо"
+        verbose_name_plural = "Блюда"
 
 
 class DishSet(models.Model):
@@ -37,12 +58,26 @@ class DishSet(models.Model):
         return mark_safe(f'<img src="{self.image.url}" width="70" height="70" />')
 
     image_tag.short_description = 'Image'
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Набор"
+        verbose_name_plural = "Наборы"
     
 
 class RestaurantImageCategory(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Категория изображений"
+        verbose_name_plural = "Категории изображений"
 
 
 class RestaurantImage(models.Model):
@@ -58,4 +93,9 @@ class RestaurantImage(models.Model):
 
     image_tag.short_description = 'Image'
 
+    def __str__(self):
+        return self.name
 
+    class Meta:
+        verbose_name = "Изображение ресторана"
+        verbose_name_plural = "Изображения ресторана"
