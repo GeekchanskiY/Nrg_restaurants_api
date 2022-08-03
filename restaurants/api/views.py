@@ -14,7 +14,7 @@ from .serializers import RestaurantSerializer
 
 
 @swagger_auto_schema(methods=["get", "post"], responses={200: RestaurantSerializer(many=True)})
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def test(request: Request):
     if request.method == "GET":
         restaurants = Restaurant.objects.all()
