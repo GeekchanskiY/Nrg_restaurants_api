@@ -19,6 +19,6 @@ def test(request: Request):
     if request.method == "GET":
         restaurants = Restaurant.objects.all()
         serializer = RestaurantSerializer(restaurants, many=True)
-        return serializer.data
+        return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == "POST":
         return Response(request.data, status=status.HTTP_200_OK)
