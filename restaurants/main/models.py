@@ -23,7 +23,10 @@ class DishesCategory(models.Model):
     image = models.ImageField(upload_to="images/dishes_categories/", null=True, blank=True)
 
     def __str__(self):
-        return self.name_ru
+        if self.name_ru is not None:
+            return self.name_ru
+        else:
+            return "None"
 
     class Meta:
         verbose_name = "Категория блюд"
@@ -40,7 +43,10 @@ class Dish(models.Model):
     category = models.ForeignKey(DishesCategory, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name_ru
+        if self.name_ru is not None:
+            return self.name_ru
+        else:
+            return "None"
 
     class Meta:
         verbose_name = "Блюдо"
@@ -61,7 +67,10 @@ class DishSet(models.Model):
     image_tag.short_description = 'Image'
 
     def __str__(self):
-        return self.name_ru
+        if self.name_ru is not None:
+            return self.name_ru
+        else:
+            return "None"
 
     class Meta:
         verbose_name = "Набор"
