@@ -50,4 +50,5 @@ class RestaurantImageCategoryAdmin(admin.ModelAdmin):
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('id', 'customer_rating', 'is_shown')
     fields = ('customer_email', 'customer_name', 'customer_rating', 'time', 'restaurant', 'is_shown')
+    readonly_fields = ['time']
     
