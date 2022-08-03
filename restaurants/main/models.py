@@ -18,8 +18,8 @@ class Restaurant(models.Model):
 class DishesCategory(models.Model):
     id = models.AutoField(primary_key=True)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
-    name_ru = models.CharField(max_length=255)
-    name_en = models.CharField(max_length=255)
+    name_ru = models.CharField(max_length=255, null=True, blank=True)
+    name_en = models.CharField(max_length=255, null=True, blank=True)
     image = models.ImageField(upload_to="images/dishes_categories/", null=True, blank=True)
 
     def __str__(self):
@@ -32,8 +32,8 @@ class DishesCategory(models.Model):
 
 class Dish(models.Model):
     id = models.AutoField(primary_key=True)
-    name_ru = models.CharField(max_length=255)
-    name_en = models.CharField(max_length=255)
+    name_ru = models.CharField(max_length=255, null=True, blank=True)
+    name_en = models.CharField(max_length=255, null=True, blank=True)
     price = models.FloatField()
     description = models.TextField()
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
@@ -49,8 +49,8 @@ class Dish(models.Model):
 
 class DishSet(models.Model):
     id = models.AutoField(primary_key=True)
-    name_ru = models.CharField(max_length=255)
-    name_en = models.CharField(max_length=255)
+    name_ru = models.CharField(max_length=255, null=True, blank=True)
+    name_en = models.CharField(max_length=255, null=True, blank=True)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     dishes = models.ManyToManyField(Dish)
     image = models.ImageField(upload_to="images/dish_sets/")
