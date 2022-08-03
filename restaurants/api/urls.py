@@ -15,8 +15,9 @@ Including another URLconf
 """
 
 from django.urls import path
-from .views import test
+from .views import get_all_restaurants, get_all_restaurant_dishes
 
 urlpatterns = [
-    path('/', test, name="test"),
+    path('restaurants/all', get_all_restaurants, name="get_all_restaurants"),
+    path('dishes/<int:pk>}', get_all_restaurant_dishes, name="get_all_restaurant dishes")
 ]
