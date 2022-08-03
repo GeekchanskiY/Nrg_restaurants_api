@@ -12,20 +12,20 @@ class RestaurantImageSerializer(serializers.HyperlinkedModelSerializer):
 
 class RestaurantImageCategorySerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
-    images_set = RestaurantImageSerializer(many=True)
+    restaurantimage_set = RestaurantImageSerializer(many=True)
 
     class Meta:
         model = RestaurantImageCategory
-        fields = ('id', 'name', 'images_set')
+        fields = ('id', 'name', 'restaurantimage_set')
 
 
 class RestaurantSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
-    image_categories_set = RestaurantImageCategorySerializer(many=True)
+    restaurantimagecategory_set = RestaurantImageCategorySerializer(many=True)
 
     class Meta:
         model = Restaurant
-        fields = ('id', 'name', 'image_categories_set')
+        fields = ('id', 'name', 'restaurantimagecategory_set')
 
 
 class DishSerializer(serializers.HyperlinkedModelSerializer):
