@@ -17,12 +17,13 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
+IS_HEROKU = "DYNO" in os.environ
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-m7pdq8*$vnals&5lg+ih1s2(0r!5z6(%vx%a@$)@e7rk79bo55'
+SECRET_KEY = os.environ["secret_key"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -79,9 +80,20 @@ WSGI_APPLICATION = 'restaurants.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+     'default': {
+
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+        'NAME': os.environ["db_name"],
+
+        'USER': os.environ["db_user"],
+
+        'PASSWORD': os.environ["db_password"],
+
+        'HOST': os.environ["db_host"],
+
+        'PORT': os.environ["db_port"],
+
     }
 }
 
