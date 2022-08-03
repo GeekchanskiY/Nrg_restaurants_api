@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Restaurant, Dish, DishSet, DishesCategory, RestaurantImage, RestaurantImageCategory
+from .models import Restaurant, Dish, DishSet, DishesCategory, RestaurantImage, RestaurantImageCategory, Review
 
 # Register your models here.
 
@@ -44,4 +44,10 @@ class RestaurantImageAdmin(admin.ModelAdmin):
 class RestaurantImageCategoryAdmin(admin.ModelAdmin):
     list_display = ['name']
     fields = ('name', 'restaurant')
+
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ('id', 'customer_rating', 'is_shown')
+    fields = ('customer_email', 'customer_name', 'customer_rating', 'time', 'restaurant', 'is_shown')
     
