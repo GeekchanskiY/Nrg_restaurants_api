@@ -23,12 +23,16 @@ IS_HEROKU = "DYNO" in os.environ
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ["secret_key"]
+SECRET_KEY = "django-insecure-m7pdq8*$vnals&5lg+ih1s2(0r!5z6(%vx%a@$)@e7rk79bo55"
+if IS_HEROKU:
+    SECRET_KEY = os.environ["secret_key"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['restautants.herokuapp.com']
+ALLOWED_HOSTS = []
+if IS_HEROKU:
+    ALLOWED_HOSTS = ['restautants.herokuapp.com']
 
 
 # Application definition
@@ -41,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_yasg',
     'main',
     'api'
 ]
@@ -78,24 +83,30 @@ WSGI_APPLICATION = 'restaurants.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
 DATABASES = {
-     'default': {
-
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
-        'NAME': os.environ["db_name"],
-
-        'USER': os.environ["db_user"],
-
-        'PASSWORD': os.environ["db_password"],
-
-        'HOST': os.environ["db_host"],
-
-        'PORT': os.environ["db_port"],
-
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'database',
     }
 }
+if IS_HEROKU:
+    DATABASES = {
+         'default': {
+
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+            'NAME': os.environ["db_name"],
+
+            'USER': os.environ["db_user"],
+
+            'PASSWORD': os.environ["db_password"],
+
+            'HOST': os.environ["db_host"],
+
+            'PORT': os.environ["db_port"],
+
+        }
+    }
 
 
 # Password validation
