@@ -66,7 +66,8 @@ class ReviewSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'customer_email', 'customer_name', 'time', 'customer_rating', 'restaurant_id', 'customer_text')
 
     def create(self, validated_data):
-        restaurant_id = validated_data.pop("restaurant")["id"]
+        restaurant = validated_data.pop("restaurant")
+        restaurant_id = restaurant["id"]
         try:
             restaurant = Restaurant.objects.get(id=restaurant_id)
         except ObjectDoesNotExist:
