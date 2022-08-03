@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from main.models import Restaurant, Dish, DishesCategory
+from main.models import Restaurant, Dish, DishesCategory, Review
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -37,7 +37,7 @@ def get_all_restaurant_dishes(request: Request, pk: int):
     dishes = Dish.objects.filter(restaurant__id=pk)
     
     serializer = DishSerializer(dishes, many=True)
-    return Response({serializer.data}, status=status.HTTP_200_OK)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @swagger_auto_schema(method="get", responses={200: DishesCategorySerializer()})
@@ -46,7 +46,7 @@ def get_dishes_category(request: Request, pk: int):
     dishes_category = DishesCategory.objects.get(id=pk)
 
     serializer = DishesCategorySerializer(dishes_category)
-    return Response({serializer.data},
+    return Response(serializer.data,
                     status=status.HTTP_200_OK)
 
 
@@ -54,9 +54,8 @@ def get_dishes_category(request: Request, pk: int):
     201: ReviewSerializer(),
     400: openapi.Response('Validation error {error: str, data: dict}')
 })
-#@swagger_auto_schema(method="get", responses={200: ReviewSerializer()})
 @api_view(['POST'])
-def restaurant_reviews(request: Request):
+def post_restaurant_review(request: Request):
     try:
         reviews_serializer = ReviewSerializer(data=request.data)
         if reviews_serializer.is_valid(raise_exception=True):
@@ -65,4 +64,11 @@ def restaurant_reviews(request: Request):
     except ValidationError as e:
         return Response(dict(error=str(e), data=request.data), status=status.HTTP_400_BAD_REQUEST)
 
+
+@swagger_auto_schema(method="get", responses={200: ReviewSerializer(many=True)})
+@api_view(['GET'])
+def get_restaurant_reviews(request: Request, pk: int):
+    reviews = Review.objects.filter(restaurant__id=pk)
+    serializer = ReviewSerializer(reviews, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
