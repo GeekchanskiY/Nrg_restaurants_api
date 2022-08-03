@@ -1,7 +1,7 @@
 from abc import ABC
 
 from rest_framework import serializers
-from restaurants.main.models import Restaurant
+from main.models import Restaurant
 
 
 class RestaurantSerializer(serializers.HyperlinkedModelSerializer):
