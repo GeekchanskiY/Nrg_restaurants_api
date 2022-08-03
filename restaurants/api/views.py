@@ -28,5 +28,6 @@ def get_all_restaurant_dishes(request: Request, pk: int):
     dishes = Dish.objects.filter(restaurant__id=pk)
     
     serializer = DishSerializer(dishes, many=True)
-    return Response({"queries": len(connection.queries), "dishes": serializer.data}, status=status.HTTP_200_OK)
+    return Response({"queries": [{"q": q} for q in connection.queries], "query": dishes.query, "dishes": serializer.data},
+                    status=status.HTTP_200_OK)
 
