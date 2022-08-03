@@ -32,7 +32,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 if IS_HEROKU:
-    ALLOWED_HOSTS = ['restautants.herokuapp.com']
+    ALLOWED_HOSTS = ['*']
 
 
 # Application definition
