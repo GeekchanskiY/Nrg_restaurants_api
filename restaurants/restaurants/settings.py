@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
+from django.test.runner import DiscoverRunner
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -90,23 +92,13 @@ DATABASES = {
     }
 }
 if IS_HEROKU:
-    DATABASES = {
-         'default': {
+    url = os.environ["DATABASE_URL"]
+    DATABASES["default"] = dj_database_url.config(
+        conn_max_age=600, ssl_require=True)
 
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
-            'NAME': os.environ["db_name"],
-
-            'USER': os.environ["db_user"],
-
-            'PASSWORD': os.environ["db_password"],
-
-            'HOST': os.environ["db_host"],
-
-            'PORT': os.environ["db_port"],
-
-        }
-    }
+    # Enable test database if found in CI environment.
+    if "CI" in os.environ:
+        DATABASES["default"]["TEST"] = DATABASES["default"]
 
 
 # Password validation
@@ -149,6 +141,19 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
+
+class HerokuDiscoverRunner(DiscoverRunner):
+    """Test Runner for Heroku CI, which provides a database for you.
+    This requires you to set the TEST database (done for you by settings().)"""
+
+    def setup_databases(self, **kwargs):
+        self.keepdb = True
+        return super(HerokuDiscoverRunner, self).setup_databases(**kwargs)
+
+
+# Use HerokuDiscoverRunner on Heroku CI
+if "CI" in os.environ:
+    TEST_RUNNER = "gettingstarted.settings.HerokuDiscoverRunner"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
