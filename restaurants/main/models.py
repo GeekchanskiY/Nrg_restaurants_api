@@ -1,8 +1,6 @@
 from django.db import models
 from django.utils.html import mark_safe
-from django.conf import settings
-
-# Create your models here.
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Restaurant(models.Model):
@@ -20,11 +18,12 @@ class Restaurant(models.Model):
 class DishesCategory(models.Model):
     id = models.AutoField(primary_key=True)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
+    name_ru = models.CharField(max_length=255)
+    name_en = models.CharField(max_length=255)
     image = models.ImageField(upload_to="images/dishes_categories/", null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return self.name_ru
 
     class Meta:
         verbose_name = "Категория блюд"
@@ -33,14 +32,15 @@ class DishesCategory(models.Model):
 
 class Dish(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255)
+    name_ru = models.CharField(max_length=255)
+    name_en = models.CharField(max_length=255)
     price = models.FloatField()
     description = models.TextField()
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     category = models.ForeignKey(DishesCategory, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.name_ru
 
     class Meta:
         verbose_name = "Блюдо"
@@ -49,7 +49,8 @@ class Dish(models.Model):
 
 class DishSet(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255)
+    name_ru = models.CharField(max_length=255)
+    name_en = models.CharField(max_length=255)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     dishes = models.ManyToManyField(Dish)
     image = models.ImageField(upload_to="images/dish_sets/")
@@ -60,7 +61,7 @@ class DishSet(models.Model):
     image_tag.short_description = 'Image'
 
     def __str__(self):
-        return self.name
+        return self.name_ru
 
     class Meta:
         verbose_name = "Набор"
@@ -99,3 +100,12 @@ class RestaurantImage(models.Model):
     class Meta:
         verbose_name = "Изображение ресторана"
         verbose_name_plural = "Изображения ресторана"
+
+
+class Review(models.Model):
+    id = models.AutoField(primary_key=True)
+    customer_email = models.EmailField(blank=True, null=True)
+    customer_name = models.CharField(max_length=255)
+    customer_rating = models.IntegerField(default=10, validators=[MaxValueValidator(10), MinValueValidator(1)])
+    time = models.DateTimeField(auto_now=True)
+    is_shown = models.BooleanField(default=False)
