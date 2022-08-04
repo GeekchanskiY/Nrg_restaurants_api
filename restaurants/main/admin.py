@@ -26,7 +26,7 @@ class DishAdmin(admin.ModelAdmin):
         """
         qs = self.model._default_manager.get_queryset()
         ordering = self.get_ordering(request)
-        if request.user.is_superuser():
+        if request.user.is_superuser:
             if ordering:
                 qs = qs.order_by(*ordering)
             return qs
