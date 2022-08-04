@@ -2,6 +2,8 @@ from django.db import models
 from django.utils.html import mark_safe
 from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime
+from django.contrib.auth.models import AbstractUser
+from .managers import CustomUserManager
 
 
 class Restaurant(models.Model):
@@ -123,3 +125,17 @@ class Review(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     customer_text = models.TextField(null=True, blank=True)
     is_shown = models.BooleanField(default=False)
+
+
+class AdminUser(AbstractUser):
+    username = models.CharField(max_length=255, unique=True)
+    email = None
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, null=True)
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
+
+    def __str__(self):
+        return self.username
