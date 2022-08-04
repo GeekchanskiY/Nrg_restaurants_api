@@ -19,17 +19,19 @@ class DishAdmin(admin.ModelAdmin):
     fields = ('name_ru', 'name_en', 'price', 'description', 'category', 'restaurant')
     search_fields = ['name_ru', 'name_en']
 
-    """def get_object(self, request, object_id, from_field=None):
-        queryset = self.get_queryset(request)
-        model = queryset.model
-        field = (
-            model._meta.pk if from_field is None else model._meta.get_field(from_field)
-        )
-        try:
-            object_id = field.to_python(object_id)
-            return queryset.get(**{field.name: object_id})
-        except (model.DoesNotExist, ValidationError, ValueError):
-            return None"""
+    def get_queryset(self, request):
+        """
+        Return a QuerySet of all model instances that can be edited by the
+        admin site. This is used by changelist_view.
+        """
+        qs = self.model._default_manager.get_queryset()
+        ordering = self.get_ordering(request)
+        if request.user.is_superuser():
+            if ordering:
+                qs = qs.order_by(*ordering)
+            return qs
+        qs = qs.filter(restaurant__id=request.user.restaurant.id)
+        return qs
 
 
 @admin.register(DishSet)
@@ -76,6 +78,6 @@ class RestaurantInline(admin.TabularInline):
 @admin.register(AdminUser)
 class AdminUserAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'restaurant')
-    fields = ('id', 'username', 'password', 'restaurant')
+    fields = ('id', 'username', 'restaurant')
     readonly_fields = ['id']
     
