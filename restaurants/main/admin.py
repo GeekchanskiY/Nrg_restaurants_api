@@ -78,6 +78,6 @@ class RestaurantInline(admin.TabularInline):
 @admin.register(AdminUser)
 class AdminUserAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'restaurant')
-    fields = ('id', 'username', 'restaurant', 'is_staff', 'is_active', 'password', 'permissions')
+    fields = ('id', 'username', 'restaurant', 'is_staff', 'is_active', 'password', 'user_permissions')
     readonly_fields = ['id']
     
