@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Restaurant, Dish, DishSet, DishesCategory, RestaurantImage, RestaurantImageCategory, Review
+from .models import Restaurant, Dish, DishSet, DishesCategory, RestaurantImage, RestaurantImageCategory, Review, \
+    AdminUser
+from django.core.exceptions import ValidationError
 
 # Register your models here.
 
@@ -16,6 +18,18 @@ class DishAdmin(admin.ModelAdmin):
     list_display = ('id', 'name_ru', 'name_en', 'price')
     fields = ('name_ru', 'name_en', 'price', 'description', 'category', 'restaurant')
     search_fields = ['name_ru', 'name_en']
+
+    """def get_object(self, request, object_id, from_field=None):
+        queryset = self.get_queryset(request)
+        model = queryset.model
+        field = (
+            model._meta.pk if from_field is None else model._meta.get_field(from_field)
+        )
+        try:
+            object_id = field.to_python(object_id)
+            return queryset.get(**{field.name: object_id})
+        except (model.DoesNotExist, ValidationError, ValueError):
+            return None"""
 
 
 @admin.register(DishSet)
@@ -53,4 +67,11 @@ class ReviewAdmin(admin.ModelAdmin):
     fields = ('customer_email', 'customer_name', 'customer_rating_1', 'customer_rating_2',
               'customer_rating_3', 'time', 'restaurant', 'is_shown')
     readonly_fields = ['time']
+
+
+@admin.register(AdminUser)
+class AdminUserAdmin(admin.ModelAdmin):
+    list_display = ('id', 'username', 'restaurant.name')
+    fields = ('id', 'username', 'password', 'restaurant')
+    readonly_fields = ['id']
     
