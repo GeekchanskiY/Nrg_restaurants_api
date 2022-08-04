@@ -69,9 +69,13 @@ class ReviewAdmin(admin.ModelAdmin):
     readonly_fields = ['time']
 
 
+class RestaurantInline(admin.TabularInline):
+    model = Restaurant
+
+
 @admin.register(AdminUser)
 class AdminUserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'restaurant.name')
+    list_display = ('id', 'username', 'restaurant')
     fields = ('id', 'username', 'password', 'restaurant')
     readonly_fields = ['id']
     
