@@ -29,6 +29,9 @@ SECRET_KEY = "django-insecure-m7pdq8*$vnals&5lg+ih1s2(0r!5z6(%vx%a@$)@e7rk79bo55
 if IS_HEROKU:
     SECRET_KEY = os.environ["secret_key"]
 
+
+AUTH_USER_MODEL = 'main.AdminUser'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -142,6 +145,7 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MEDIA_URL = '/media/'
+
 
 class HerokuDiscoverRunner(DiscoverRunner):
     """Test Runner for Heroku CI, which provides a database for you.
