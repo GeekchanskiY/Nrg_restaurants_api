@@ -18,6 +18,18 @@ class Restaurant(models.Model):
         verbose_name_plural = "Рестораны"
 
 
+class News(models.Model):
+    id: models.AutoField = models.AutoField(primary_key=True)
+    article = models.CharField(max_length=255)
+    time_posted = models.DateTimeField(default=datetime.now)
+    image = models.ImageField(upload_to="images/news/")
+    text = models.TextField()
+
+    class Meta:
+        verbose_name = "Новость"
+        verbose_name_plural = "Новости"
+
+
 class DishesCategory(models.Model):
     id = models.AutoField(primary_key=True)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
@@ -42,7 +54,6 @@ class Dish(models.Model):
     name_en = models.CharField(max_length=255)
     price = models.FloatField()
     description = models.TextField()
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     category = models.ForeignKey(DishesCategory, on_delete=models.CASCADE)
 
     def __str__(self):
