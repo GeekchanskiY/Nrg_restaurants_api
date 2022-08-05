@@ -56,11 +56,11 @@ class DishesCategorySerializer(serializers.HyperlinkedModelSerializer):
 
 class DishSetSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
-    dish_set = DishSerializer(many=True)
+    dishes = DishSerializer(many=True)
 
     class Meta:
         model = DishSet
-        fields = ('id', 'name_ru', 'name_en', 'image', 'dish_set')
+        fields = ('id', 'name_ru', 'name_en', 'image', 'dishes')
 
 
 class ReviewSerializer(serializers.HyperlinkedModelSerializer):
