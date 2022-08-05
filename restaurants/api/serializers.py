@@ -93,7 +93,7 @@ class RestaurantDishSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Restaurant
-        fields = ('dishes_set', 'dishes_sets')
+        fields = ('dishescategory_set', 'dishset_set')
         read_only_fields = ('dishescategory_set', 'dishset_set')
 
 
