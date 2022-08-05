@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from main.models import Restaurant, Dish, DishesCategory, Review, DishSet
+from main.models import Restaurant, Dish, DishesCategory, Review, DishSet, News
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -10,7 +10,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from .serializers import RestaurantSerializer, DishSerializer, DishesCategorySerializer, ReviewSerializer,\
-    DishSetSerializer
+    DishSetSerializer, NewsSerializer
 
 from django.db import connection, reset_queries
 
@@ -23,6 +23,15 @@ def get_all_restaurants(request: Request):
     restaurants = Restaurant.objects.all()
     serializer = RestaurantSerializer(restaurants, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@swagger_auto_schema(method="get", responses={200: NewsSerializer(many=True)})
+@api_view(['GET'])
+def get_all_news(requests: Request):
+    news = News.objects.all()
+    serializer = NewsSerializer(news, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 @swagger_auto_schema(method="get", responses={200: RestaurantSerializer(many=True)})
