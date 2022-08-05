@@ -8,7 +8,8 @@ from main.models import Restaurant, Dish, DishesCategory, DishSet, RestaurantIma
 class RestaurantImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = RestaurantImage
-        fields = ('image', 'name')
+        fields = ('id', 'image', 'name')
+        read_only_fields = ('id', 'image', 'name')
 
 
 class NewsSerializer(serializers.HyperlinkedModelSerializer):
@@ -33,6 +34,7 @@ class RestaurantSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Restaurant
         fields = ('id', 'name', 'restaurantimagecategory_set')
+        read_only_fields = ('id', 'name', 'restaurantimagecategory_set')
 
 
 class DishSerializer(serializers.HyperlinkedModelSerializer):
