@@ -8,8 +8,8 @@ from django.core.exceptions import ValidationError
 
 @admin.register(Restaurant)
 class RestaurantAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name')
-    fields = ['name']
+    list_display = ('name', 'front_end_key')
+    fields = ['name', 'front_end_key']
     search_fields = ['name']
 
 

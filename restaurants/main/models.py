@@ -9,6 +9,7 @@ from .managers import CustomUserManager
 class Restaurant(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, verbose_name="Название", unique=True)
+    front_end_key = models.IntegerField(unique=True, null=True, blank=True)
 
     def __str__(self):
         return self.name
