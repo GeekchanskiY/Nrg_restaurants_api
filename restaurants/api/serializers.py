@@ -89,13 +89,13 @@ class ReviewSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class RestaurantDishSerializer(serializers.HyperlinkedModelSerializer):
-    dishes_set = DishesCategorySerializer(many=True)
-    dishes_sets = DishSetSerializer(many=True)
+    dishescategory_set = DishesCategorySerializer(many=True)
+    dishset_set = DishSetSerializer(many=True)
 
     class Meta:
         model = Restaurant
         fields = ('dishes_set', 'dishes_sets')
-        read_only_fields = ('dishes_set', 'dishes_sets')
+        read_only_fields = ('dishescategory_set', 'dishset_set')
 
 
         
