@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Restaurant, Dish, DishSet, DishesCategory, RestaurantImage, RestaurantImageCategory, Review, \
-    AdminUser
+    AdminUser, News
 from django.core.exceptions import ValidationError
 
 # Register your models here.
@@ -15,7 +15,7 @@ class RestaurantAdmin(admin.ModelAdmin):
 
 @admin.register(Dish)
 class DishAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name_ru', 'name_en', 'price')
+    list_display = ('name_ru', 'name_en', 'price')
     fields = ('name_ru', 'name_en', 'price', 'description', 'category', 'restaurant')
     search_fields = ['name_ru', 'name_en']
 
@@ -36,7 +36,7 @@ class DishAdmin(admin.ModelAdmin):
 
 @admin.register(DishSet)
 class DishSetAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name_ru', 'name_en', 'image_tag')
+    list_display = ('name_ru', 'name_en', 'image_tag')
     fields = ('name_ru', 'name_en', 'restaurant', 'dishes', 'image', 'image_tag')
     readonly_fields = ['image_tag']
     search_fields = ['name_ru', 'name_en']
@@ -44,7 +44,7 @@ class DishSetAdmin(admin.ModelAdmin):
 
 @admin.register(DishesCategory)
 class DishesCategoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name_ru', 'name_en')
+    list_display = ('name_ru', 'name_en')
     fields = ('restaurant', 'name_ru', 'name_en', 'image')
     search_fields = ['name_ru', 'name_en']
 
@@ -64,11 +64,12 @@ class RestaurantImageCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('id', 'customer_rating_1', 'customer_rating_2',
+    list_display = ('customer_name', 'customer_rating_1', 'customer_rating_2',
                     'customer_rating_3', 'is_shown')
     fields = ('customer_email', 'customer_name', 'customer_rating_1', 'customer_rating_2',
               'customer_rating_3', 'time', 'restaurant', 'is_shown')
-    readonly_fields = ['time']
+    readonly_fields = ('customer_email', 'customer_name', 'customer_rating_1', 'customer_rating_2',
+                       'customer_rating_3', 'time', 'restaurant', 'is_shown')
 
 
 class RestaurantInline(admin.TabularInline):
@@ -78,6 +79,12 @@ class RestaurantInline(admin.TabularInline):
 @admin.register(AdminUser)
 class AdminUserAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'restaurant')
-    fields = ('id', 'username', 'restaurant', 'is_staff', 'is_active', 'password', 'user_permissions')
-    readonly_fields = ['id']
+    fields = ('username', 'restaurant', 'is_staff', 'is_active', 'user_permissions')
+    readonly_fields = ('id', 'username')
+
+
+@admin.register(News)
+class NewsAdmin(admin.ModelAdmin):
+    list_display = ('article', 'time_posted')
+    fields = ('article', 'time_posted', 'image', 'text')
     
