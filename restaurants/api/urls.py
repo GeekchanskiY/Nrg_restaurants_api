@@ -19,7 +19,7 @@ from .views import get_all_restaurants, post_restaurant_review,\
     get_restaurant_reviews, get_all_news, get_all_news_exclude, get_all_dish_restaurant_data
 
 urlpatterns = [
-    path('restaurants/all', get_all_restaurants, name="get_all_restaurants"),
+    path('restaurant/all', get_all_restaurants, name="get_all_restaurants"),
     path('restaurant/<int:pk>/dishes', get_all_dish_restaurant_data, name="get_all_restaurant dishes"),
     path('reviews/create', post_restaurant_review, name="create_restaurant_review"),
     path('reviews/get/<int:pk>', get_restaurant_reviews, name="get_restaurant_reviews"),
