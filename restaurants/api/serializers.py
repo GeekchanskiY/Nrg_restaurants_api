@@ -1,13 +1,20 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
-from main.models import Restaurant, Dish, DishesCategory, DishSet, RestaurantImageCategory, RestaurantImage, Review
+from main.models import Restaurant, Dish, DishesCategory, DishSet, RestaurantImageCategory, RestaurantImage, Review,\
+    News
 
 
 class RestaurantImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = RestaurantImage
         fields = ('image', 'name')
+
+
+class NewsSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = News
+        fields = ('id', 'article', 'time_posted', 'image', 'text')
 
 
 class RestaurantImageCategorySerializer(serializers.HyperlinkedModelSerializer):
