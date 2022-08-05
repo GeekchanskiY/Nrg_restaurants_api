@@ -33,8 +33,8 @@ class RestaurantSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Restaurant
-        fields = ('id', 'name', 'restaurantimagecategory_set')
-        read_only_fields = ('id', 'name', 'restaurantimagecategory_set')
+        fields = ('id', 'name', 'front_end_key','restaurantimagecategory_set')
+        read_only_fields = ('id', 'name', 'front_end_key', 'restaurantimagecategory_set')
 
 
 class DishSerializer(serializers.HyperlinkedModelSerializer):
