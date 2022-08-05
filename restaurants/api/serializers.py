@@ -86,7 +86,16 @@ class ReviewSerializer(serializers.HyperlinkedModelSerializer):
         review = Review(restaurant=restaurant, **validated_data)
         review.save()
         return review
-        
+
+
+class RestaurantDishSerializer(serializers.HyperlinkedModelSerializer):
+    dishes_set = DishesCategorySerializer(many=True)
+    dishes_sets = DishSetSerializer(many=True)
+
+    class Meta:
+        model = Restaurant
+        fields = ('dishes_set', 'dishes_sets')
+        read_only_fields = ('dishes_set', 'dishes_sets')
 
 
         

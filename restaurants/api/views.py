@@ -9,8 +9,7 @@ from rest_framework.exceptions import ValidationError
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from .serializers import RestaurantSerializer, DishSerializer, DishesCategorySerializer, ReviewSerializer,\
-    DishSetSerializer, NewsSerializer
+from .serializers import RestaurantSerializer, ReviewSerializer, NewsSerializer, RestaurantDishSerializer
 
 from django.db import connection, reset_queries
 
@@ -41,32 +40,12 @@ def get_all_news_exclude(requests: Request, pk: int):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-
-@swagger_auto_schema(method="get", responses={200: RestaurantSerializer(many=True)})
+@swagger_auto_schema(method="get", responses={200: RestaurantDishSerializer()})
 @api_view(['GET'])
-def get_all_restaurants_categories(request: Request):
-    restaurants = Restaurant.objects.all()
-    serializer = RestaurantSerializer(restaurants, many=True)
+def get_all_dish_restaurant_data(request: Request, pk: int):
+    restaurant = Restaurant.objects.get(front_end_key=pk)
+    serializer = RestaurantDishSerializer(restaurant)
     return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-@swagger_auto_schema(method="get", responses={200: DishSerializer(many=True)})
-@api_view(['GET'])
-def get_all_restaurant_dishes(request: Request, pk: int):
-    dishes = Dish.objects.filter(restaurant__id=pk)
-    
-    serializer = DishSerializer(dishes, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-@swagger_auto_schema(method="get", responses={200: DishesCategorySerializer()})
-@api_view(['GET'])
-def get_dishes_category(request: Request, pk: int):
-    dishes_category = DishesCategory.objects.get(id=pk)
-
-    serializer = DishesCategorySerializer(dishes_category)
-    return Response(serializer.data,
-                    status=status.HTTP_200_OK)
 
 
 @swagger_auto_schema(method="post", request_body=ReviewSerializer(), responses={
@@ -89,13 +68,5 @@ def post_restaurant_review(request: Request):
 def get_restaurant_reviews(request: Request, pk: int):
     reviews = Review.objects.filter(restaurant__id=pk)
     serializer = ReviewSerializer(reviews, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-@swagger_auto_schema(method="get", responses={200: DishSetSerializer(many=True)})
-@api_view(['GET'])
-def get_restaurant_dish_sets(request: Request, pk: int):
-    dish_sets = DishSet.objects.filter(restaurant__id=pk)
-    serializer = DishSetSerializer(dish_sets, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
