@@ -104,6 +104,14 @@ class DishesCategoryAdmin(admin.ModelAdmin):
         if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
             obj.delete()
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(DishesCategoryAdmin, self).get_form(request, obj, **kwargs)
+        field = form.base_fields["restaurant"]
+        field.widget.can_add_related = False
+        field.widget.can_change_related = False
+        field.widget.can_delete_related = False
+        return form
+
     
 
 
