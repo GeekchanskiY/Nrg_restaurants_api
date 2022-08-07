@@ -106,6 +106,7 @@ class NewsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = News
         fields = ('id', 'article', 'time_posted', 'image', 'text', 'restaurant')
+        read_only_fields = ['id']
 
 
         
