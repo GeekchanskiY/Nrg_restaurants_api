@@ -69,6 +69,43 @@ class DishesCategoryAdmin(admin.ModelAdmin):
     fields = ('restaurant', 'name_ru', 'name_en', 'image')
     search_fields = ['name_ru', 'name_en']
 
+    def get_queryset(self, request):
+        """
+        Return a QuerySet of all model instances that can be edited by the
+        admin site. This is used by changelist_view.
+        """
+        qs = self.model._default_manager.get_queryset()
+        ordering = self.get_ordering(request)
+        if request.user.is_superuser:
+            if ordering:
+                qs = qs.order_by(*ordering)
+            return qs
+        qs = qs.filter(restaurant__id=request.user.restaurant.id)
+        return qs
+
+    def save_form(self, request, form, change):
+        """
+        Given a ModelForm return an unsaved instance. ``change`` is True if
+        the object is being changed, and False if it's being added.
+        """
+        return form.save(commit=False)
+
+    def save_model(self, request, obj, form, change):
+        """
+        Given a model instance save it to the database.
+        """
+        if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
+            obj.save()
+
+    def delete_model(self, request, obj):
+        """
+        Given a model instance delete it from the database.
+        """
+        if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
+            obj.delete()
+
+    
+
 
 @admin.register(RestaurantImage)
 class RestaurantImageAdmin(admin.ModelAdmin):
