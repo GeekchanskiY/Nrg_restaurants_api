@@ -109,7 +109,6 @@ class RestaurantImageCategory(models.Model):
 class RestaurantImage(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     category = models.ForeignKey(RestaurantImageCategory, on_delete=models.CASCADE, null=True, blank=True)
     image = models.ImageField(upload_to="images/restaurants/")
     default = models.BooleanField(default=False)
