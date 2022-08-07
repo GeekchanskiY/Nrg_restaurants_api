@@ -40,6 +40,14 @@ def get_all_news_exclude(requests: Request, pk: int):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(method="get", responses={200: NewsSerializer()})
+@api_view(['GET'])
+def get_news_by_id(requests: Request, pk: int):
+    news = News.objects.get(id=pk)
+    serializer = NewsSerializer(news)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 @swagger_auto_schema(method="get", responses={200: RestaurantDishSerializer()})
 @api_view(['GET'])
 def get_all_dish_restaurant_data(request: Request, pk: int):
