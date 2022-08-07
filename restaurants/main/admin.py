@@ -54,6 +54,11 @@ class DishAdmin(admin.ModelAdmin):
         if request.user.is_superuser or obj.category.restaurant.id == request.user.restaurant.id:
             obj.delete()
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(DishAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['category'].queryset = Dish.objects.filter(category__restaurant__id=request.user.restaurant.id)
+        return form
+
 
 @admin.register(DishSet)
 class DishSetAdmin(admin.ModelAdmin):
