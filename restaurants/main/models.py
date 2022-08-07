@@ -25,7 +25,7 @@ class News(models.Model):
     time_posted = models.DateTimeField(default=datetime.now)
     image = models.ImageField(upload_to="images/news/")
     text = models.TextField()
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, null=True)
 
     class Meta:
         verbose_name = "Новость"
