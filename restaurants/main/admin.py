@@ -86,5 +86,5 @@ class AdminUserAdmin(admin.ModelAdmin):
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
     list_display = ('article', 'time_posted')
-    fields = ('article', 'time_posted', 'image', 'text')
+    fields = ('article', 'time_posted', 'image', 'text', 'restaurant')
     
