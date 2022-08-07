@@ -16,7 +16,7 @@ class RestaurantAdmin(admin.ModelAdmin):
 @admin.register(Dish)
 class DishAdmin(admin.ModelAdmin):
     list_display = ('name_ru', 'name_en', 'price')
-    fields = ('name_ru', 'name_en', 'price', 'description', 'category', 'restaurant')
+    fields = ('name_ru', 'name_en', 'price', 'description', 'category')
     search_fields = ['name_ru', 'name_en']
 
     def get_queryset(self, request):
