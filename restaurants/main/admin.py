@@ -30,7 +30,7 @@ class DishAdmin(admin.ModelAdmin):
             if ordering:
                 qs = qs.order_by(*ordering)
             return qs
-        qs = qs.filter(restaurant__id=request.user.restaurant.id)
+        qs = qs.filter(category__restaurant__id=request.user.restaurant.id)
         return qs
 
     def save_form(self, request, form, change):
