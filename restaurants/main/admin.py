@@ -44,14 +44,14 @@ class DishAdmin(admin.ModelAdmin):
         """
         Given a model instance save it to the database.
         """
-        if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
+        if request.user.is_superuser or obj.category.restaurant.id == request.user.restaurant.id:
             obj.save()
 
     def delete_model(self, request, obj):
         """
         Given a model instance delete it from the database.
         """
-        if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
+        if request.user.is_superuser or obj.category.restaurant.id == request.user.restaurant.id:
             obj.delete()
 
 
