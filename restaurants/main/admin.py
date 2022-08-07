@@ -33,6 +33,27 @@ class DishAdmin(admin.ModelAdmin):
         qs = qs.filter(restaurant__id=request.user.restaurant.id)
         return qs
 
+    def save_form(self, request, form, change):
+        """
+        Given a ModelForm return an unsaved instance. ``change`` is True if
+        the object is being changed, and False if it's being added.
+        """
+        return form.save(commit=False)
+
+    def save_model(self, request, obj, form, change):
+        """
+        Given a model instance save it to the database.
+        """
+        if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
+            obj.save()
+
+    def delete_model(self, request, obj):
+        """
+        Given a model instance delete it from the database.
+        """
+        if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
+            obj.delete()
+
 
 @admin.register(DishSet)
 class DishSetAdmin(admin.ModelAdmin):
