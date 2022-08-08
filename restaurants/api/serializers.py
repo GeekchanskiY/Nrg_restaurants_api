@@ -69,13 +69,13 @@ class DishSetSerializer(serializers.HyperlinkedModelSerializer):
 class ReviewSerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
     time = serializers.DateTimeField(read_only=True)
-    restaurant_id = serializers.PrimaryKeyRelatedField(queryset=Restaurant.objects.all(),
-                                                       source='restaurant.id')
+    restaurant_front_end_key = serializers.PrimaryKeyRelatedField(queryset=Restaurant.objects.all(),
+                                                                  source='restaurant.front_end_key')
 
     class Meta:
         model = Review
         fields = ('id', 'customer_email', 'customer_name', 'time', 'customer_rating_1', 'customer_rating_2',
-                  'customer_rating_3', 'restaurant_id', 'customer_text')
+                  'customer_rating_3', 'restaurant_front_end_key', 'customer_text')
 
     def create(self, validated_data):
         restaurant = validated_data.pop("restaurant")
