@@ -41,7 +41,7 @@ class DishAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(DishAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['dish']['restaurant'].queryset = Restaurant.objects.filter(restaurant__id=request.user.restaurant.id)
+        form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
         return form
 
 
