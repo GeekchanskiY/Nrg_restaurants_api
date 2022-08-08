@@ -16,7 +16,7 @@ class RestaurantAdmin(admin.ModelAdmin):
 @admin.register(Dish)
 class DishAdmin(admin.ModelAdmin):
     list_display = ('name_ru', 'name_en', 'price')
-    fields = ('name_ru', 'name_en', 'price', 'description', 'restaurant')
+    fields = ('name_ru', 'name_en', 'price', 'description_ru', 'description_en', 'restaurant')
     search_fields = ['name_ru', 'name_en']
 
     def get_queryset(self, request):
@@ -49,8 +49,9 @@ class DishAdmin(admin.ModelAdmin):
 class DishSetAdmin(admin.ModelAdmin):
     list_display = ('name_ru', 'name_en', 'image_tag')
     fields = ('name_ru', 'name_en', 'restaurant', 'dishes', 'image', 'image_tag')
-    readonly_fields = ['image_tag']
-    search_fields = ['name_ru', 'name_en']
+    filter_horizontal = ('dishes',)
+    readonly_fields = ('image_tag',)
+    search_fields = ('name_ru', 'name_en')
 
     def get_queryset(self, request):
         qs = self.model._default_manager.get_queryset()
@@ -85,7 +86,8 @@ class DishSetAdmin(admin.ModelAdmin):
 class DishesCategoryAdmin(admin.ModelAdmin):
     list_display = ('name_ru', 'name_en')
     fields = ('restaurant', 'name_ru', 'name_en', 'image', 'dishes')
-    search_fields = ['name_ru', 'name_en']
+    search_fields = ('name_ru', 'name_en')
+    filter_horizontal = ('dishes',)
 
     def get_queryset(self, request):
         qs = self.model._default_manager.get_queryset()
@@ -120,7 +122,7 @@ class DishesCategoryAdmin(admin.ModelAdmin):
 class RestaurantImageAdmin(admin.ModelAdmin):
     list_display = ('name', 'image_tag')
     fields = ('name', 'image', 'image_tag', 'category', 'default')
-    readonly_fields = ['image_tag']
+    readonly_fields = ('image_tag', )
 
     def get_queryset(self, request):
         qs = self.model._default_manager.get_queryset()
@@ -154,7 +156,7 @@ class RestaurantImageAdmin(admin.ModelAdmin):
 
 @admin.register(RestaurantImageCategory)
 class RestaurantImageCategoryAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ('name',)
     fields = ('name', 'restaurant')
 
     def get_queryset(self, request):
