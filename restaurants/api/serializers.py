@@ -45,7 +45,7 @@ class DishSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Dish
-        fields = ('id', 'name_ru', 'name_en', 'price')
+        fields = ('id', 'name_ru', 'name_en', 'price', 'description_ru', 'description_en')
 
 
 class DishesCategorySerializer(serializers.HyperlinkedModelSerializer):
@@ -95,8 +95,8 @@ class RestaurantDishSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Restaurant
-        fields = ('dishescategory_set')
-        read_only_fields = ('dishescategory_set')
+        fields = ('dishescategory_set',)
+        read_only_fields = ('dishescategory_set',)
 
 
 class NewsSerializer(serializers.HyperlinkedModelSerializer):
