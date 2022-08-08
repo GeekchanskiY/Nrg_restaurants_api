@@ -9,7 +9,8 @@ from rest_framework.exceptions import ValidationError
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from .serializers import RestaurantSerializer, ReviewSerializer, NewsSerializer, RestaurantDishSerializer
+from .serializers import RestaurantSerializer, ReviewSerializer, NewsSerializer, RestaurantDishSerializer,\
+    DishSetSerializer
 
 from django.db import connection, reset_queries
 
@@ -53,6 +54,14 @@ def get_news_by_id(requests: Request, pk: int):
 def get_all_dish_restaurant_data(request: Request, pk: int):
     restaurant = Restaurant.objects.get(front_end_key=pk)
     serializer = RestaurantDishSerializer(restaurant)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@swagger_auto_schema(method="get", responses={200: DishSetSerializer(many=True)})
+@api_view(['GET'])
+def get_all_dish_set_restaurant_data(request: Request, pk: int):
+    restaurant = DishSet.objects.get(restaurant__front_end_key=pk)
+    serializer = DishSetSerializer(restaurant)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
