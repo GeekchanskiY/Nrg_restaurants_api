@@ -50,11 +50,11 @@ class DishSerializer(serializers.HyperlinkedModelSerializer):
 
 class DishesCategorySerializer(serializers.HyperlinkedModelSerializer):
     id = serializers.ReadOnlyField()
-    dish_set = DishSerializer(many=True)
+    dishes = DishSerializer(many=True)
 
     class Meta:
         model = DishesCategory
-        fields = ('id', 'name_ru', 'name_en', 'image', 'dish_set')
+        fields = ('id', 'name_ru', 'name_en', 'image', 'dishes')
 
 
 class DishSetSerializer(serializers.HyperlinkedModelSerializer):
@@ -92,12 +92,11 @@ class ReviewSerializer(serializers.HyperlinkedModelSerializer):
 
 class RestaurantDishSerializer(serializers.HyperlinkedModelSerializer):
     dishescategory_set = DishesCategorySerializer(many=True)
-    dishset_set = DishSetSerializer(many=True)
 
     class Meta:
         model = Restaurant
-        fields = ('dishescategory_set', 'dishset_set')
-        read_only_fields = ('dishescategory_set', 'dishset_set')
+        fields = ('dishescategory_set')
+        read_only_fields = ('dishescategory_set')
 
 
 class NewsSerializer(serializers.HyperlinkedModelSerializer):
