@@ -16,50 +16,32 @@ class RestaurantAdmin(admin.ModelAdmin):
 @admin.register(Dish)
 class DishAdmin(admin.ModelAdmin):
     list_display = ('name_ru', 'name_en', 'price')
-    fields = ('name_ru', 'name_en', 'price', 'description', 'category')
+    fields = ('name_ru', 'name_en', 'price', 'description', 'restaurant')
     search_fields = ['name_ru', 'name_en']
 
     def get_queryset(self, request):
-        """
-        Return a QuerySet of all model instances that can be edited by the
-        admin site. This is used by changelist_view.
-        """
         qs = self.model._default_manager.get_queryset()
         ordering = self.get_ordering(request)
         if request.user.is_superuser:
             if ordering:
                 qs = qs.order_by(*ordering)
             return qs
-        qs = qs.filter(category__restaurant__id=request.user.restaurant.id)
+        qs = qs.filter(restaurant__id=request.user.restaurant.id)
         if ordering:
             qs = qs.order_by(*ordering)
         return qs
 
-    def save_form(self, request, form, change):
-        """
-        Given a ModelForm return an unsaved instance. ``change`` is True if
-        the object is being changed, and False if it's being added.
-        """
-
-        return form.save(commit=False)
-
     def save_model(self, request, obj, form, change):
-        """
-        Given a model instance save it to the database.
-        """
         if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
             obj.save()
 
     def delete_model(self, request, obj):
-        """
-        Given a model instance delete it from the database.
-        """
-        if request.user.is_superuser or obj.category.restaurant.id == request.user.restaurant.id:
+        if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
             obj.delete()
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(DishAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['category'].queryset = DishesCategory.objects.filter(restaurant__id=request.user.restaurant.id)
+        form.base_fields['restaurant'].queryset = Restaurant.objects.filter(restaurant__id=request.user.restaurant.id)
         return form
 
 
@@ -71,10 +53,6 @@ class DishSetAdmin(admin.ModelAdmin):
     search_fields = ['name_ru', 'name_en']
 
     def get_queryset(self, request):
-        """
-        Return a QuerySet of all model instances that can be edited by the
-        admin site. This is used by changelist_view.
-        """
         qs = self.model._default_manager.get_queryset()
         ordering = self.get_ordering(request)
 
@@ -88,24 +66,11 @@ class DishSetAdmin(admin.ModelAdmin):
             qs = qs.order_by(*ordering)
         return qs
 
-    def save_form(self, request, form, change):
-        """
-        Given a ModelForm return an unsaved instance. ``change`` is True if
-        the object is being changed, and False if it's being added.
-        """
-        return form.save(commit=False)
-
     def save_model(self, request, obj, form, change):
-        """
-        Given a model instance save it to the database.
-        """
         if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
             obj.save()
 
     def delete_model(self, request, obj):
-        """
-        Given a model instance delete it from the database.
-        """
         if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
             obj.delete()
 
@@ -119,14 +84,10 @@ class DishSetAdmin(admin.ModelAdmin):
 @admin.register(DishesCategory)
 class DishesCategoryAdmin(admin.ModelAdmin):
     list_display = ('name_ru', 'name_en')
-    fields = ('restaurant', 'name_ru', 'name_en', 'image')
+    fields = ('restaurant', 'name_ru', 'name_en', 'image', 'dishes')
     search_fields = ['name_ru', 'name_en']
 
     def get_queryset(self, request):
-        """
-        Return a QuerySet of all model instances that can be edited by the
-        admin site. This is used by changelist_view.
-        """
         qs = self.model._default_manager.get_queryset()
         ordering = self.get_ordering(request)
 
@@ -140,30 +101,18 @@ class DishesCategoryAdmin(admin.ModelAdmin):
             qs = qs.order_by(*ordering)
         return qs
 
-    def save_form(self, request, form, change):
-        """
-        Given a ModelForm return an unsaved instance. ``change`` is True if
-        the object is being changed, and False if it's being added.
-        """
-        return form.save(commit=False)
-
     def save_model(self, request, obj, form, change):
-        """
-        Given a model instance save it to the database.
-        """
         if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
             obj.save()
 
     def delete_model(self, request, obj):
-        """
-        Given a model instance delete it from the database.
-        """
         if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
             obj.delete()
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(DishesCategoryAdmin, self).get_form(request, obj, **kwargs)
         form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
+        form.base_fields['dishes'].queryset = Dish.objects.filter(category__restaurant__id=request.user.restaurant.id)
         return form
 
 
@@ -174,10 +123,6 @@ class RestaurantImageAdmin(admin.ModelAdmin):
     readonly_fields = ['image_tag']
 
     def get_queryset(self, request):
-        """
-        Return a QuerySet of all model instances that can be edited by the
-        admin site. This is used by changelist_view.
-        """
         qs = self.model._default_manager.get_queryset()
         ordering = self.get_ordering(request)
 
@@ -191,24 +136,11 @@ class RestaurantImageAdmin(admin.ModelAdmin):
             qs = qs.order_by(*ordering)
         return qs
 
-    def save_form(self, request, form, change):
-        """
-        Given a ModelForm return an unsaved instance. ``change`` is True if
-        the object is being changed, and False if it's being added.
-        """
-        return form.save(commit=False)
-
     def save_model(self, request, obj, form, change):
-        """
-        Given a model instance save it to the database.
-        """
         if request.user.is_superuser or obj.category__restaurant.id == request.user.restaurant.id:
             obj.save()
 
     def delete_model(self, request, obj):
-        """
-        Given a model instance delete it from the database.
-        """
         if request.user.is_superuser or obj.category__restaurant.id == request.user.restaurant.id:
             obj.delete()
 
@@ -225,12 +157,7 @@ class RestaurantImageCategoryAdmin(admin.ModelAdmin):
     list_display = ['name']
     fields = ('name', 'restaurant')
 
-
     def get_queryset(self, request):
-        """
-        Return a QuerySet of all model instances that can be edited by the
-        admin site. This is used by changelist_view.
-        """
         qs = self.model._default_manager.get_queryset()
         ordering = self.get_ordering(request)
 
@@ -244,24 +171,11 @@ class RestaurantImageCategoryAdmin(admin.ModelAdmin):
             qs = qs.order_by(*ordering)
         return qs
 
-    def save_form(self, request, form, change):
-        """
-        Given a ModelForm return an unsaved instance. ``change`` is True if
-        the object is being changed, and False if it's being added.
-        """
-        return form.save(commit=False)
-
     def save_model(self, request, obj, form, change):
-        """
-        Given a model instance save it to the database.
-        """
         if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
             obj.save()
 
     def delete_model(self, request, obj):
-        """
-        Given a model instance delete it from the database.
-        """
         if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
             obj.delete()
 
@@ -280,6 +194,33 @@ class ReviewAdmin(admin.ModelAdmin):
     readonly_fields = ('customer_email', 'customer_name', 'customer_rating_1', 'customer_rating_2',
                        'customer_rating_3', 'time', 'restaurant', 'is_shown')
 
+    def get_queryset(self, request):
+        qs = self.model._default_manager.get_queryset()
+        ordering = self.get_ordering(request)
+
+        if request.user.is_superuser:
+            if ordering:
+                qs = qs.order_by(*ordering)
+            return qs
+
+        qs = qs.filter(restaurant__id=request.user.restaurant.id)
+        if ordering:
+            qs = qs.order_by(*ordering)
+        return qs
+
+    def save_model(self, request, obj, form, change):
+        if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
+            obj.save()
+
+    def delete_model(self, request, obj):
+        if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
+            obj.delete()
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ReviewAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
+        return form
+
 
 @admin.register(AdminUser)
 class AdminUserAdmin(admin.ModelAdmin):
@@ -292,4 +233,31 @@ class AdminUserAdmin(admin.ModelAdmin):
 class NewsAdmin(admin.ModelAdmin):
     list_display = ('article', 'time_posted')
     fields = ('article', 'time_posted', 'image', 'text', 'restaurant')
+
+    def get_queryset(self, request):
+        qs = self.model._default_manager.get_queryset()
+        ordering = self.get_ordering(request)
+
+        if request.user.is_superuser:
+            if ordering:
+                qs = qs.order_by(*ordering)
+            return qs
+
+        qs = qs.filter(restaurant__id=request.user.restaurant.id)
+        if ordering:
+            qs = qs.order_by(*ordering)
+        return qs
+
+    def save_model(self, request, obj, form, change):
+        if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
+            obj.save()
+
+    def delete_model(self, request, obj):
+        if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
+            obj.delete()
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(NewsAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
+        return form
     
