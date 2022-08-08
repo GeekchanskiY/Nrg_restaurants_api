@@ -18,3 +18,9 @@ class NewUserForm(UserCreationForm):
 		if commit:
 			user.save()
 		return user
+
+
+class UploadDataForm(forms.Form):
+	name = forms.CharField(max_length=255)
+	table = forms.FileField()
+	
