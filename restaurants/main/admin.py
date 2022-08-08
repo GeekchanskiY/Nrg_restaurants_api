@@ -229,6 +229,8 @@ class AdminUserAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'restaurant')
     fields = ('username', 'restaurant', 'is_staff', 'is_active', 'user_permissions')
     readonly_fields = ('id', 'username')
+    filter_horizontal = ('user_permissions',)
+
 
 
 @admin.register(News)
