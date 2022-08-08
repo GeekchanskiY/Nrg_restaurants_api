@@ -74,7 +74,7 @@ def post_restaurant_review(request: Request):
 @swagger_auto_schema(method="get", responses={200: ReviewSerializer(many=True)})
 @api_view(['GET'])
 def get_restaurant_reviews(request: Request, pk: int):
-    reviews = Review.objects.filter(restaurant__id=pk)
+    reviews = Review.objects.filter(restaurant__front_end_key=pk)
     serializer = ReviewSerializer(reviews, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
