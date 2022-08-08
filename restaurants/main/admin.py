@@ -77,7 +77,7 @@ class DishSetAdmin(admin.ModelAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super(DishSetAdmin, self).get_form(request, obj, **kwargs)
         form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
-        form.base_fields['dishes'].queryset = Dish.objects.filter(category__restaurant__id=request.user.restaurant.id)
+        form.base_fields['dishes'].queryset = Dish.objects.filter(restaurant__id=request.user.restaurant.id)
         return form
 
 
@@ -112,7 +112,7 @@ class DishesCategoryAdmin(admin.ModelAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super(DishesCategoryAdmin, self).get_form(request, obj, **kwargs)
         form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
-        form.base_fields['dishes'].queryset = Dish.objects.filter(category__restaurant__id=request.user.restaurant.id)
+        form.base_fields['dishes'].queryset = Dish.objects.filter(restaurant__id=request.user.restaurant.id)
         return form
 
 
