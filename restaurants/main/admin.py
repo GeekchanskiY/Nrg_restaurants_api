@@ -41,7 +41,8 @@ class DishAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(DishAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
+        if not request.user.is_superuser:
+            form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
         return form
 
 
@@ -77,8 +78,9 @@ class DishSetAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(DishSetAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
-        form.base_fields['dishes'].queryset = Dish.objects.filter(restaurant__id=request.user.restaurant.id)
+        if not request.user.is_superuser:
+            form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
+            form.base_fields['dishes'].queryset = Dish.objects.filter(restaurant__id=request.user.restaurant.id)
         return form
 
 
@@ -113,8 +115,9 @@ class DishesCategoryAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(DishesCategoryAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
-        form.base_fields['dishes'].queryset = Dish.objects.filter(restaurant__id=request.user.restaurant.id)
+        if not request.user.is_superuser:
+            form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
+            form.base_fields['dishes'].queryset = Dish.objects.filter(restaurant__id=request.user.restaurant.id)
         return form
 
 
@@ -148,9 +151,10 @@ class RestaurantImageAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(RestaurantImageAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['category'].queryset = RestaurantImageCategory.objects.filter(
-            restaurant__id=request.user.restaurant.id
-        )
+        if not request.user.is_superuser:
+            form.base_fields['category'].queryset = RestaurantImageCategory.objects.filter(
+                restaurant__id=request.user.restaurant.id
+            )
         return form
 
 
@@ -183,7 +187,8 @@ class RestaurantImageCategoryAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(RestaurantImageCategoryAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
+        if not request.user.is_superuser:
+            form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
         return form
 
 
@@ -220,7 +225,8 @@ class ReviewAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(ReviewAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
+        if not request.user.is_superuser:
+            form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
         return form
 
 
