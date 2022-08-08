@@ -44,7 +44,8 @@ class Dish(models.Model):
     name_ru = models.CharField(max_length=255)
     name_en = models.CharField(max_length=255)
     price = models.FloatField()
-    description = models.TextField()
+    description_ru = models.TextField(null=True, blank=True)
+    description_en = models.TextField(null=True, blank=True)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
 
     objects = models.Manager()
