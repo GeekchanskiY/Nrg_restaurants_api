@@ -11,8 +11,10 @@ class Restaurant(models.Model):
     name = models.CharField(max_length=255, verbose_name="Название", unique=True)
     front_end_key = models.IntegerField(unique=True, null=True, blank=True)
 
+    objects = models.Manager()
+
     def __str__(self):
-        return self.name
+        return f"{self.id} - {self.name}"
 
     class Meta:
         verbose_name = "Ресторан"
@@ -27,9 +29,35 @@ class News(models.Model):
     text = models.TextField()
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, null=True)
 
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.id
+
     class Meta:
         verbose_name = "Новость"
         verbose_name_plural = "Новости"
+
+
+class Dish(models.Model):
+    id = models.AutoField(primary_key=True)
+    name_ru = models.CharField(max_length=255)
+    name_en = models.CharField(max_length=255)
+    price = models.FloatField()
+    description = models.TextField()
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+
+    objects = models.Manager()
+
+    def __str__(self):
+        if self.name_ru is not None:
+            return f"{self.name_ru} - {str(self.restaurant)}"
+        else:
+            return "None"
+
+    class Meta:
+        verbose_name = "Блюдо"
+        verbose_name_plural = "Блюда"
 
 
 class DishesCategory(models.Model):
@@ -38,6 +66,9 @@ class DishesCategory(models.Model):
     name_ru = models.CharField(max_length=255)
     name_en = models.CharField(max_length=255)
     image = models.ImageField(upload_to="images/dishes_categories/", null=True, blank=True)
+    dishes = models.ManyToManyField(Dish)
+
+    objects = models.Manager()
 
     def __str__(self):
         if self.name_ru is not None:
@@ -50,25 +81,6 @@ class DishesCategory(models.Model):
         verbose_name_plural = "Категории блюд"
 
 
-class Dish(models.Model):
-    id = models.AutoField(primary_key=True)
-    name_ru = models.CharField(max_length=255)
-    name_en = models.CharField(max_length=255)
-    price = models.FloatField()
-    description = models.TextField()
-    category = models.ForeignKey(DishesCategory, on_delete=models.CASCADE)
-
-    def __str__(self):
-        if self.name_ru is not None:
-            return self.name_ru
-        else:
-            return "None"
-
-    class Meta:
-        verbose_name = "Блюдо"
-        verbose_name_plural = "Блюда"
-
-
 class DishSet(models.Model):
     id = models.AutoField(primary_key=True)
     name_ru = models.CharField(max_length=255)
@@ -76,6 +88,8 @@ class DishSet(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     dishes = models.ManyToManyField(Dish)
     image = models.ImageField(upload_to="images/dish_sets/")
+
+    objects = models.Manager()
 
     def image_tag(self):
         return mark_safe(f'<img src="{self.image.url}" width="70" height="70" />')
@@ -98,6 +112,8 @@ class RestaurantImageCategory(models.Model):
     name = models.CharField(max_length=255)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
 
+    objects = models.Manager()
+
     def __str__(self):
         return self.name
 
@@ -112,6 +128,8 @@ class RestaurantImage(models.Model):
     category = models.ForeignKey(RestaurantImageCategory, on_delete=models.CASCADE, null=True, blank=True)
     image = models.ImageField(upload_to="images/restaurants/")
     default = models.BooleanField(default=False)
+
+    objects = models.Manager()
 
     def image_tag(self):
         return mark_safe(f'<img src="{self.image.url}" width="70" height="70" />')
@@ -138,6 +156,15 @@ class Review(models.Model):
     customer_text = models.TextField(null=True, blank=True)
     is_shown = models.BooleanField(default=False)
 
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.customer_email
+
+    class Meta:
+        verbose_name = "Отзыв"
+        verbose_name_plural = "Отзывы"
+
 
 class AdminUser(AbstractUser):
     username = models.CharField(max_length=255, unique=True)
@@ -151,3 +178,7 @@ class AdminUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    class Meta:
+        verbose_name = "Администратор"
+        verbose_name_plural = "Администраторы"
