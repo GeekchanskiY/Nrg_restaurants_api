@@ -1,4 +1,5 @@
-from django.shortcuts import  render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse
+from django.http import FileResponse
 from .forms import NewUserForm, UploadDataForm
 from .models import Restaurant, Dish
 from django.contrib.auth import login
@@ -44,7 +45,7 @@ def export_view(request):
 
     dishes = Dish.objects.filter(id=request.user.restaurant.id)
 
-    output = io.StringIO()
+    output = io.BytesIO()
     workbook = xlsxwriter.Workbook(output)
     dish_worksheet = workbook.add_worksheet()
 
@@ -64,14 +65,6 @@ def export_view(request):
         category = dish.dishescategory_set.first()
         if category is not None:
             dish_worksheet.write(2 + row_num, 6, category.name_ru)
+    workbook.close()
 
-
-    # Set up the Http response.
-    filename = 'django_simple.xlsx'
-    response = HttpResponse(
-        content_type='application/vnd.ms-excel'
-    )
-    response['Content-Disposition'] = 'attachment; filename=%s' % filename
-    response.write(output.getvalue())
-
-    return response
+    return FileResponse(output, as_attachment=True, filename='report.xlsx')
