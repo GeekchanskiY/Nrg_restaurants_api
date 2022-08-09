@@ -65,14 +65,14 @@ def export_view(request):
         if category is not None:
             dish_worksheet.write(2 + row_num, 6, category.name_ru)
 
-    output.seek(0)
+    workbook.close()
 
     # Set up the Http response.
     filename = 'django_simple.xlsx'
     response = HttpResponse(
-        output,
         content_type='application/vnd.ms-excel'
     )
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    response.write(output.getvalue())
 
     return response
