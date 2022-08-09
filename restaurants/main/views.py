@@ -46,6 +46,33 @@ def export_view(request):
 
     output = io.BytesIO()
     workbook = xlsxwriter.Workbook(output)
-    worksheet = workbook.add_worksheet()
+    dish_worksheet = workbook.add_worksheet(name="Блюда")
 
-    return HttpResponse("test")
+    dish_worksheet.write(1, 1, "Название рус")
+    dish_worksheet.write(1, 2, "Название англ")
+    dish_worksheet.write(1, 3, "цена")
+    dish_worksheet.write(1, 4, "Описание рус")
+    dish_worksheet.write(1, 5, "Описание англ")
+    dish_worksheet.write(1, 6, "Название категории на русском (опционально, категория должна существовать в бд)")
+
+    for row_num, dish in enumerate(dishes):
+        dish_worksheet.write(2 + row_num, 1, dish.name_ru)
+        dish_worksheet.write(2 + row_num, 2, dish.name_en)
+        dish_worksheet.write(2 + row_num, 3, dish.price)
+        dish_worksheet.write(2 + row_num, 4, dish.description_ru)
+        dish_worksheet.write(2 + row_num, 5, dish.description_en)
+        category = dish.dishescategory_set.first()
+        if category is not None:
+            dish_worksheet.write(2 + row_num, 6, category.name_ru)
+
+    output.seek(0)
+
+    # Set up the Http response.
+    filename = 'django_simple.xlsx'
+    response = HttpResponse(
+        output,
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+
+    return response
