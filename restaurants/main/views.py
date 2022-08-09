@@ -44,9 +44,9 @@ def export_view(request):
 
     dishes = Dish.objects.filter(id=request.user.restaurant.id)
 
-    output = io.BytesIO()
+    output = io.StringIO()
     workbook = xlsxwriter.Workbook(output)
-    dish_worksheet = workbook.add_worksheet(name="Блюда")
+    dish_worksheet = workbook.add_worksheet()
 
     dish_worksheet.write(1, 1, "Название рус")
     dish_worksheet.write(1, 2, "Название англ")
@@ -71,7 +71,7 @@ def export_view(request):
     filename = 'django_simple.xlsx'
     response = HttpResponse(
         output,
-        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        content_type='application/vnd.ms-excel'
     )
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
 
