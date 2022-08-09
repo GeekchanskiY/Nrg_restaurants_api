@@ -65,7 +65,6 @@ def export_view(request):
         if category is not None:
             dish_worksheet.write(2 + row_num, 6, category.name_ru)
 
-    workbook.close()
 
     # Set up the Http response.
     filename = 'django_simple.xlsx'
