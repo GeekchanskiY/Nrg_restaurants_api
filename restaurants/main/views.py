@@ -35,7 +35,10 @@ def import_view(request):
             save_uploaded_file(request.FILES['table'])
             workbook = openpyxl.load_workbook("data.xlsx")
             sheet = workbook.active
-            return HttpResponse(sheet.max_row)
+            if sheet.max_row > 1 and sheet.max_column == 7:
+                pass
+            else:
+                return HttpResponse("Invalid xlsx format")
     else:
         form = UploadDataForm()
 
