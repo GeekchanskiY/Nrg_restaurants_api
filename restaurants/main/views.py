@@ -37,7 +37,7 @@ def import_view(request):
             sheet = workbook.active
             return HttpResponse(sheet.max_row)
         else:
-            return HttpResponse("Error")
+            return HttpResponse(form.errors)
     else:
         form = UploadDataForm()
 
