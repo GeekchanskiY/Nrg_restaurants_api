@@ -59,7 +59,7 @@ def import_view(request):
                                 name_ru=category_name,
                                 restaurant=request.user.restaurant
                                 )
-                            if dish not in category_obj.dishes:
+                            if dish not in category_obj.dishes.all():
                                 category_obj.dishes.add(dish)
                         except ObjectDoesNotExist:
                             continue
@@ -70,7 +70,7 @@ def import_view(request):
                                 name_ru=dish_set_name,
                                 restaurant=request.user.restaurant
                                 )
-                            if dish not in dish_set_obj.dishes:
+                            if dish not in dish_set_obj.dishes.all():
                                 dish_set_obj.dishes.add(dish)
                         except ObjectDoesNotExist:
                             continue
