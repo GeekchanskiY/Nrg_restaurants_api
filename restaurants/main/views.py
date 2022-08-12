@@ -66,4 +66,4 @@ def export_view(request):
             dish_worksheet.write(2 + row_num, 6, category.name_ru)
     workbook.close()
 
-    return FileResponse(open("output.xlsx"))
+    return FileResponse(open("output.xlsx", "rb"))
