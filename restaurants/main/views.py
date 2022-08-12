@@ -4,7 +4,7 @@ from .forms import NewUserForm, UploadDataForm
 from .models import Restaurant, Dish
 from django.contrib.auth import login
 from django.contrib import messages
-import io
+import openpyxl
 import xlsxwriter
 
 
@@ -31,9 +31,11 @@ def import_view(request):
     if request.method == "POST":
         form = UploadDataForm(request.POST, request.FILES)
         if form.is_valid():
+            # P.S. BytesIO can't be used because of the client's wish of seeing last table using ftp
             save_uploaded_file(request.FILES['file'])
-            workbook = xlsxwriter.Workbook()
-            return HttpResponse("Success")
+            workbook = openpyxl.load_workbook("data.xlsx")
+            sheet = workbook.active
+            return HttpResponse(sheet.max_row)
     else:
         form = UploadDataForm()
 
