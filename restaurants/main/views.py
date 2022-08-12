@@ -48,12 +48,12 @@ def export_view(request):
     workbook = xlsxwriter.Workbook("output.xlsx")
     dish_worksheet = workbook.add_worksheet()
 
-    dish_worksheet.write(1, 1, "Название рус")
-    dish_worksheet.write(1, 2, "Название англ")
-    dish_worksheet.write(1, 3, "цена")
-    dish_worksheet.write(1, 4, "Описание рус")
-    dish_worksheet.write(1, 5, "Описание англ")
-    dish_worksheet.write(1, 6, "Название категории на русском (опционально, категория должна существовать в бд)")
+    dish_worksheet.write(0, 0, "Название рус")
+    dish_worksheet.write(0, 1, "Название англ")
+    dish_worksheet.write(0, 2, "цена")
+    dish_worksheet.write(0, 3, "Описание рус")
+    dish_worksheet.write(0, 4, "Описание англ")
+    dish_worksheet.write(0, 5, "Название категории на русском (опционально, категория должна существовать в бд)")
 
     for row_num, dish in enumerate(dishes):
         dish_worksheet.write(2 + row_num, 1, dish.name_ru)
