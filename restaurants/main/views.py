@@ -36,9 +36,11 @@ def import_view(request):
             workbook = openpyxl.load_workbook("data.xlsx")
             sheet = workbook.active
             if sheet.max_row > 1 and sheet.max_column == 7:
-                pass
+                for row in sheet.rows:
+                    a = row[6]
+                return HttpResponse(a)
             else:
-                return HttpResponse("Invalid xlsx format")
+                return HttpResponse("Таблица создана неправильно (нет строк или не 7 колонок)")
     else:
         form = UploadDataForm()
 
