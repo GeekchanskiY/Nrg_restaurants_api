@@ -21,6 +21,5 @@ class NewUserForm(UserCreationForm):
 
 
 class UploadDataForm(forms.Form):
-	name = forms.CharField(max_length=255)
 	table = forms.FileField()
 	
