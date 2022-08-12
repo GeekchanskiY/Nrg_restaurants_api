@@ -53,26 +53,28 @@ def import_view(request):
                     if not created:
                         dish.price = int(row[2].value)
                         dish.save()
-                    for category_name in row[5].value.split(";"):
-                        try:
-                            category_obj = DishesCategory.objects.get(
-                                name_ru=category_name,
-                                restaurant=request.user.restaurant
-                                )
-                            if dish not in category_obj.dishes:
-                                category_obj.dishes.add(dish)
-                        except ObjectDoesNotExist:
-                            continue
-                    for dish_set_name in row[6].value.split(";"):
-                        try:
-                            dish_set_obj = DishSet.objects.get(
-                                name_ru=dish_set_name,
-                                restaurant=request.user.restaurant
-                                )
-                            if dish not in dish_set_obj.dishes:
-                                dish_set_obj.dishes.add(dish)
-                        except ObjectDoesNotExist:
-                            continue
+                    if row[5].value is not None and row[5].value != "":
+                        for category_name in row[5].value.split(";"):
+                            try:
+                                category_obj = DishesCategory.objects.get(
+                                    name_ru=category_name,
+                                    restaurant=request.user.restaurant
+                                    )
+                                if dish not in category_obj.dishes:
+                                    category_obj.dishes.add(dish)
+                            except ObjectDoesNotExist:
+                                continue
+                    if row[6].value is not None and row[6].value != "":
+                        for dish_set_name in row[6].value.split(";"):
+                            try:
+                                dish_set_obj = DishSet.objects.get(
+                                    name_ru=dish_set_name,
+                                    restaurant=request.user.restaurant
+                                    )
+                                if dish not in dish_set_obj.dishes:
+                                    dish_set_obj.dishes.add(dish)
+                            except ObjectDoesNotExist:
+                                continue
                 return HttpResponse("Updated")
             else:
                 return HttpResponse("Таблица создана неправильно (нет строк или не 7 колонок)")
