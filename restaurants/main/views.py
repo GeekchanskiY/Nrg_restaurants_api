@@ -36,9 +36,9 @@ def import_view(request):
             workbook = openpyxl.load_workbook("data.xlsx")
             sheet = workbook.active
             if sheet.max_row > 1 and sheet.max_column == 7:
-                for index, row in enumerate(sheet.rows):
-                    if index == 0:
-                        continue
+                iter_rows = iter(sheet.rows)
+                next(iter_rows)
+                for row in iter_rows:
                     dish, created = Dish.objects.get_or_create(
                         name_ru=row[0].value,
                         defaults={
