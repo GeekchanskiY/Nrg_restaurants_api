@@ -36,48 +36,45 @@ def import_view(request):
             save_uploaded_file(request.FILES['table'])
             workbook = openpyxl.load_workbook("data.xlsx")
             sheet = workbook.active
-            if sheet.max_row > 1 and sheet.max_column == 7:
-                iter_rows = iter(sheet.rows)
-                next(iter_rows)
-                for row in iter_rows:
-                    dish, created = Dish.objects.get_or_create(
-                        name_ru=row[0].value,
-                        defaults={
-                            "name_en": row[1].value,
-                            "price": int(row[2].value),
-                            "description_ru": row[3].value,
-                            "description_en": row[4].value,
-                            "restaurant": request.user.restaurant,
-                        }
-                    )
-                    if not created:
-                        dish.price = int(row[2].value)
-                        dish.save()
-                    if row[5].value is not None and row[5].value != "":
-                        for category_name in row[5].value.split(";"):
-                            try:
-                                category_obj = DishesCategory.objects.get(
-                                    name_ru=category_name,
-                                    restaurant=request.user.restaurant
-                                    )
-                                if dish not in category_obj.dishes:
-                                    category_obj.dishes.add(dish)
-                            except ObjectDoesNotExist:
-                                continue
-                    if row[6].value is not None and row[6].value != "":
-                        for dish_set_name in row[6].value.split(";"):
-                            try:
-                                dish_set_obj = DishSet.objects.get(
-                                    name_ru=dish_set_name,
-                                    restaurant=request.user.restaurant
-                                    )
-                                if dish not in dish_set_obj.dishes:
-                                    dish_set_obj.dishes.add(dish)
-                            except ObjectDoesNotExist:
-                                continue
-                return HttpResponse("Updated")
-            else:
-                return HttpResponse("Таблица создана неправильно (нет строк или не 7 колонок)")
+            iter_rows = iter(sheet.rows)
+            next(iter_rows)
+            for row in iter_rows:
+                dish, created = Dish.objects.get_or_create(
+                    name_ru=row[0].value,
+                    defaults={
+                        "name_en": row[1].value,
+                        "price": int(row[2].value),
+                        "description_ru": row[3].value,
+                        "description_en": row[4].value,
+                        "restaurant": request.user.restaurant,
+                    }
+                )
+                if not created:
+                    dish.price = int(row[2].value)
+                    dish.save()
+                if row[5].value is not None and row[5].value != "":
+                    for category_name in row[5].value.split(";"):
+                        try:
+                            category_obj = DishesCategory.objects.get(
+                                name_ru=category_name,
+                                restaurant=request.user.restaurant
+                                )
+                            if dish not in category_obj.dishes:
+                                category_obj.dishes.add(dish)
+                        except ObjectDoesNotExist:
+                            continue
+                if row[6].value is not None and row[6].value != "":
+                    for dish_set_name in row[6].value.split(";"):
+                        try:
+                            dish_set_obj = DishSet.objects.get(
+                                name_ru=dish_set_name,
+                                restaurant=request.user.restaurant
+                                )
+                            if dish not in dish_set_obj.dishes:
+                                dish_set_obj.dishes.add(dish)
+                        except ObjectDoesNotExist:
+                            continue
+            return HttpResponse("Updated")
     else:
         form = UploadDataForm()
 
