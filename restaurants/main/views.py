@@ -37,8 +37,17 @@ def import_view(request):
             sheet = workbook.active
             if sheet.max_row > 1 and sheet.max_column == 7:
                 for row in sheet.rows:
-                    a = row[6]
-                return HttpResponse(a)
+                    dish, created = Dish.objects.get_or_create(
+                        name_ru=row[0].value,
+                        defaults={
+                            "name_en": row[1].value,
+                            "price": int(row[2].value),
+                            "description_ru": row[3].value,
+                            "description_en": row[4].value,
+                            "restaurant": request.user.restaurant,
+                        }
+                    )
+                    return HttpResponse(dish.name_ru)
             else:
                 return HttpResponse("Таблица создана неправильно (нет строк или не 7 колонок)")
     else:
