@@ -63,7 +63,7 @@ def export_view(request):
         dish_worksheet.write(1 + row_num, 3, dish.price)
         dish_worksheet.write(1 + row_num, 4, dish.description_ru)
         dish_worksheet.write(1 + row_num, 5, dish.description_en)
-        categories = dish.dishescategory_set.all().only("name_ru")
+        categories = list(category.name_ru for category in dish.dishescategory_set.all().only("name_ru"))
         if categories is not None and len(categories) != 0:
             dish_worksheet.write(1 + row_num, 6, ";".join(categories))
     workbook.close()
