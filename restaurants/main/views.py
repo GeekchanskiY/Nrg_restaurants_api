@@ -36,8 +36,6 @@ def import_view(request):
             workbook = openpyxl.load_workbook("data.xlsx")
             sheet = workbook.active
             return HttpResponse(sheet.max_row)
-        else:
-            return HttpResponse(form.errors)
     else:
         form = UploadDataForm()
 
