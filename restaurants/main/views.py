@@ -29,7 +29,6 @@ def save_uploaded_file(file):
 
 def import_view(request):
     if request.method == "POST":
-        return HttpResponse(request.FILES.get("table"))
         form = UploadDataForm(request.POST, request.FILES)
         if form.is_valid():
             # P.S. BytesIO can't be used because of the client's wish of seeing last table using ftp
