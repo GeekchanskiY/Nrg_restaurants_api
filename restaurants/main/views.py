@@ -39,11 +39,17 @@ def import_view(request):
             iter_rows = iter(sheet.rows)
             next(iter_rows)
             for row in iter_rows:
+                if row[1].value is None or row[2].value is None or row[0].value is None:
+                    continue
+                try:
+                    price = float(row[2].value)
+                except ValueError:
+                    continue
                 dish, created = Dish.objects.get_or_create(
                     name_ru=row[0].value,
                     defaults={
                         "name_en": row[1].value,
-                        "price": int(row[2].value),
+                        "price": float(row[2].value),
                         "description_ru": row[3].value,
                         "description_en": row[4].value,
                         "restaurant": request.user.restaurant,
