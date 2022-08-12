@@ -45,8 +45,7 @@ def export_view(request):
 
     dishes = Dish.objects.filter(id=request.user.restaurant.id)
 
-    output = io.BytesIO()
-    workbook = xlsxwriter.Workbook(output)
+    workbook = xlsxwriter.Workbook("output.xlsx")
     dish_worksheet = workbook.add_worksheet()
 
     dish_worksheet.write(1, 1, "Название рус")
@@ -67,4 +66,4 @@ def export_view(request):
             dish_worksheet.write(2 + row_num, 6, category.name_ru)
     workbook.close()
 
-    return FileResponse(output, as_attachment=True, filename='report.xlsx')
+    return FileResponse(as_attachment=True, filename='output.xlsx')
