@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import FileResponse
 from .forms import NewUserForm, UploadDataForm
-from .models import Restaurant, Dish
+from .models import Dish, DishesCategory, DishSet
 from django.contrib.auth import login
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 import openpyxl
 import xlsxwriter
 
@@ -49,7 +50,30 @@ def import_view(request):
                             "restaurant": request.user.restaurant,
                         }
                     )
-                    return HttpResponse(dish.name_ru)
+                    if not created:
+                        dish.price = int(row[2].value)
+                        dish.save()
+                    for category_name in row[5].value.split(";"):
+                        try:
+                            category_obj = DishesCategory.objects.get(
+                                name_ru=category_name,
+                                restaurant=request.user.restaurant
+                                )
+                            if dish not in category_obj.dishes:
+                                category_obj.dishes.add(dish)
+                        except ObjectDoesNotExist:
+                            continue
+                    for dish_set_name in row[6].value.split(";"):
+                        try:
+                            dish_set_obj = DishSet.objects.get(
+                                name_ru=dish_set_name,
+                                restaurant=request.user.restaurant
+                                )
+                            if dish not in dish_set_obj.dishes:
+                                dish_set_obj.dishes.add(dish)
+                        except ObjectDoesNotExist:
+                            continue
+                return HttpResponse("Updated")
             else:
                 return HttpResponse("Таблица создана неправильно (нет строк или не 7 колонок)")
     else:
