@@ -29,6 +29,8 @@ def save_uploaded_file(file):
 
 
 def import_view(request):
+    if request.user.restaurant is None:
+        return HttpResponse("Вы должны быть авторизованы с аккаунта администратора ресторана")
     if request.method == "POST":
         form = UploadDataForm(request.POST, request.FILES)
         if form.is_valid():
@@ -89,7 +91,7 @@ def import_view(request):
 
 def export_view(request):
     if request.user.restaurant is None:
-        return HttpResponse("Вы должны быть авторизованы с аккаунта владельца ресторана")
+        return HttpResponse("Вы должны быть авторизованы с аккаунта администратора ресторана")
 
     dishes = Dish.objects.filter(id=request.user.restaurant.id)
 
