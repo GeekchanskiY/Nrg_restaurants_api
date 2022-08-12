@@ -58,14 +58,17 @@ def export_view(request):
     dish_worksheet.write(0, 6, "Названия наборов на русском через ; (опционально)")
 
     for row_num, dish in enumerate(dishes):
-        dish_worksheet.write(1 + row_num, 1, dish.name_ru)
-        dish_worksheet.write(1 + row_num, 2, dish.name_en)
-        dish_worksheet.write(1 + row_num, 3, dish.price)
-        dish_worksheet.write(1 + row_num, 4, dish.description_ru)
-        dish_worksheet.write(1 + row_num, 5, dish.description_en)
+        dish_worksheet.write(1 + row_num, 0, dish.name_ru)
+        dish_worksheet.write(1 + row_num, 1, dish.name_en)
+        dish_worksheet.write(1 + row_num, 2, dish.price)
+        dish_worksheet.write(1 + row_num, 3, dish.description_ru)
+        dish_worksheet.write(1 + row_num, 4, dish.description_en)
         categories = list(category.name_ru for category in dish.dishescategory_set.all().only("name_ru"))
         if categories is not None and len(categories) != 0:
-            dish_worksheet.write(1 + row_num, 6, ";".join(categories))
+            dish_worksheet.write(1 + row_num, 5, ";".join(categories))
+        dish_sets = list(dish_set.name_ru for dish_set in dish.dishset_set.all().only("name_ru"))
+        if dish_sets is not None and len(dish_sets) != 0:
+            dish_worksheet.write(1 + row_num, 6, ";".join(dish_sets))
     workbook.close()
 
     return FileResponse(open("output.xlsx", "rb"))
