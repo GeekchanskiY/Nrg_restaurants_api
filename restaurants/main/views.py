@@ -32,7 +32,7 @@ def import_view(request):
         form = UploadDataForm(request.POST, request.FILES)
         if form.is_valid():
             # P.S. BytesIO can't be used because of the client's wish of seeing last table using ftp
-            save_uploaded_file(request.FILES['file'])
+            save_uploaded_file(request.FILES['table'])
             workbook = openpyxl.load_workbook("data.xlsx")
             sheet = workbook.active
             return HttpResponse(sheet.max_row)
