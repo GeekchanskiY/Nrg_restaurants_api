@@ -43,6 +43,7 @@ if IS_HEROKU:
 # Application definition
 
 INSTALLED_APPS = [
+    'django_su',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -122,6 +123,9 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+AUTHENTICATION_BACKENDS = (
+    'django_su.backends.SuBackend',
+)
 
 
 # Internationalization

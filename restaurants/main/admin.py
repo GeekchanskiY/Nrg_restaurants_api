@@ -142,11 +142,11 @@ class RestaurantImageAdmin(admin.ModelAdmin):
         return qs
 
     def save_model(self, request, obj, form, change):
-        if request.user.is_superuser or obj.category__restaurant.id == request.user.restaurant.id:
+        if request.user.is_superuser or obj.category.restaurant.id == request.user.restaurant.id:
             obj.save()
 
     def delete_model(self, request, obj):
-        if request.user.is_superuser or obj.category__restaurant.id == request.user.restaurant.id:
+        if request.user.is_superuser or obj.category.restaurant.id == request.user.restaurant.id:
             obj.delete()
 
     def get_form(self, request, obj=None, **kwargs):
@@ -225,8 +225,6 @@ class ReviewAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(ReviewAdmin, self).get_form(request, obj, **kwargs)
-        if not request.user.is_superuser:
-            form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
         return form
 
 
@@ -236,6 +234,9 @@ class AdminUserAdmin(admin.ModelAdmin):
     fields = ('username', 'restaurant', 'is_staff', 'is_active', 'user_permissions')
     readonly_fields = ('id', 'username')
     filter_horizontal = ('user_permissions',)
+
+    change_form_template = "admin/auth/user/change_form.html"
+    change_list_template = "admin/auth/user/change_list.html"
 
 
 

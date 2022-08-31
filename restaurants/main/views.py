@@ -93,7 +93,7 @@ def export_view(request):
     if request.user.restaurant is None:
         return HttpResponse("Вы должны быть авторизованы с аккаунта администратора ресторана")
 
-    dishes = Dish.objects.filter(id=request.user.restaurant.id)
+    dishes = Dish.objects.filter(restaurant=request.user.restaurant)
 
     workbook = xlsxwriter.Workbook("output.xlsx")
     dish_worksheet = workbook.add_worksheet()

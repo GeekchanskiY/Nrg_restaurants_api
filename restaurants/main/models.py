@@ -9,7 +9,7 @@ from .managers import CustomUserManager
 class Restaurant(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, verbose_name="Название", unique=True)
-    front_end_key = models.IntegerField(unique=True, null=True, blank=True)
+    front_end_key = models.IntegerField(unique=True, null=True, blank=True, verbose_name="Ключ верстальщика")
 
     objects = models.Manager()
 
@@ -23,11 +23,11 @@ class Restaurant(models.Model):
 
 class News(models.Model):
     id: models.AutoField = models.AutoField(primary_key=True)
-    article = models.CharField(max_length=255)
-    time_posted = models.DateTimeField(default=datetime.now)
-    image = models.ImageField(upload_to="images/news/")
-    text = models.TextField()
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, null=True)
+    article = models.CharField(max_length=255, verbose_name="Заголовок")
+    time_posted = models.DateTimeField(default=datetime.now, verbose_name="Время")
+    image = models.ImageField(upload_to="images/news/", verbose_name="Изображение")
+    text = models.TextField(verbose_name="Текст")
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, null=True, verbose_name="Ресторан")
 
     objects = models.Manager()
 
@@ -41,11 +41,11 @@ class News(models.Model):
 
 class Dish(models.Model):
     id = models.AutoField(primary_key=True)
-    name_ru = models.CharField(max_length=255)
-    name_en = models.CharField(max_length=255)
-    price = models.FloatField()
-    description_ru = models.TextField(null=True, blank=True)
-    description_en = models.TextField(null=True, blank=True)
+    name_ru = models.CharField(max_length=255, verbose_name="Название на русском")
+    name_en = models.CharField(max_length=255, verbose_name="Название на английском")
+    price = models.FloatField(verbose_name="Цена")
+    description_ru = models.TextField(null=True, blank=True, verbose_name="Описание на русском")
+    description_en = models.TextField(null=True, blank=True, verbose_name="Описание на английском")
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
 
     objects = models.Manager()
@@ -63,12 +63,12 @@ class Dish(models.Model):
 
 class DishesCategory(models.Model):
     id = models.AutoField(primary_key=True)
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
-    name_ru = models.CharField(max_length=255)
-    name_en = models.CharField(max_length=255)
-    image = models.ImageField(upload_to="images/dishes_categories/", null=True, blank=True)
-    dishes = models.ManyToManyField(Dish)
-
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, verbose_name="Ресторан")
+    name_ru = models.CharField(max_length=255, verbose_name="Название на русском")
+    name_en = models.CharField(max_length=255, verbose_name="Название на английском")
+    image = models.ImageField(upload_to="images/dishes_categories/", null=True, blank=True, verbose_name="Изображение")
+    dishes = models.ManyToManyField(Dish, verbose_name="Блюда")
+    priority = models.IntegerField(default=1, null=False, blank=False, verbose_name="Приоритет")
     objects = models.Manager()
 
     def __str__(self):
@@ -84,11 +84,11 @@ class DishesCategory(models.Model):
 
 class DishSet(models.Model):
     id = models.AutoField(primary_key=True)
-    name_ru = models.CharField(max_length=255)
-    name_en = models.CharField(max_length=255)
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
-    dishes = models.ManyToManyField(Dish)
-    image = models.ImageField(upload_to="images/dish_sets/")
+    name_ru = models.CharField(max_length=255, verbose_name="Название на русском")
+    name_en = models.CharField(max_length=255, verbose_name="Название на английском")
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, verbose_name="Ресторан")
+    dishes = models.ManyToManyField(Dish, verbose_name="Блюда")
+    image = models.ImageField(upload_to="images/dish_sets/", verbose_name="Изображение")
 
     objects = models.Manager()
 
@@ -126,7 +126,7 @@ class RestaurantImageCategory(models.Model):
 class RestaurantImage(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
-    category = models.ForeignKey(RestaurantImageCategory, on_delete=models.CASCADE, null=True, blank=True)
+    category = models.ForeignKey('main.RestaurantImageCategory', on_delete=models.CASCADE, null=True, blank=False)
     image = models.ImageField(upload_to="images/restaurants/")
     default = models.BooleanField(default=False)
 
