@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Restaurant, Dish, DishSet, DishesCategory, RestaurantImage, RestaurantImageCategory, Review, \
     AdminUser, News
 from django.core.exceptions import ValidationError
-
+from hijack.contrib.admin import HijackUserAdminMixin
 # Register your models here.
 
 
@@ -46,48 +46,10 @@ class DishAdmin(admin.ModelAdmin):
         return form
 
 
-@admin.register(DishSet)
-class DishSetAdmin(admin.ModelAdmin):
-    list_display = ('name_ru', 'name_en', 'image_tag')
-    fields = ('name_ru', 'name_en', 'restaurant', 'dishes', 'image', 'image_tag')
-    filter_horizontal = ('dishes',)
-    readonly_fields = ('image_tag',)
-    search_fields = ('name_ru', 'name_en')
-
-    def get_queryset(self, request):
-        qs = self.model._default_manager.get_queryset()
-        ordering = self.get_ordering(request)
-
-        if request.user.is_superuser:
-            if ordering:
-                qs = qs.order_by(*ordering)
-            return qs
-
-        qs = qs.filter(restaurant__id=request.user.restaurant.id)
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
-
-    def save_model(self, request, obj, form, change):
-        if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
-            obj.save()
-
-    def delete_model(self, request, obj):
-        if request.user.is_superuser or obj.restaurant.id == request.user.restaurant.id:
-            obj.delete()
-
-    def get_form(self, request, obj=None, **kwargs):
-        form = super(DishSetAdmin, self).get_form(request, obj, **kwargs)
-        if not request.user.is_superuser:
-            form.base_fields['restaurant'].queryset = Restaurant.objects.filter(id=request.user.restaurant.id)
-            form.base_fields['dishes'].queryset = Dish.objects.filter(restaurant__id=request.user.restaurant.id)
-        return form
-
-
 @admin.register(DishesCategory)
 class DishesCategoryAdmin(admin.ModelAdmin):
     list_display = ('name_ru', 'name_en')
-    fields = ('restaurant', 'name_ru', 'name_en', 'image', 'dishes')
+    fields = ('restaurant', 'name_ru', 'name_en', 'image', 'dishes', 'priority')
     search_fields = ('name_ru', 'name_en')
     filter_horizontal = ('dishes',)
 
@@ -195,7 +157,7 @@ class RestaurantImageCategoryAdmin(admin.ModelAdmin):
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('customer_name', 'customer_rating_1', 'customer_rating_2',
-                    'customer_rating_3', 'is_shown')
+                    'customer_rating_3', 'time')
     fields = ('customer_email', 'customer_name', 'customer_rating_1', 'customer_rating_2',
               'customer_rating_3', 'time', 'restaurant', 'is_shown')
     readonly_fields = ('customer_email', 'customer_name', 'customer_rating_1', 'customer_rating_2',
@@ -229,14 +191,12 @@ class ReviewAdmin(admin.ModelAdmin):
 
 
 @admin.register(AdminUser)
-class AdminUserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'restaurant')
-    fields = ('username', 'restaurant', 'is_staff', 'is_active', 'user_permissions')
+class AdminUserAdmin(HijackUserAdminMixin, admin.ModelAdmin):
     readonly_fields = ('id', 'username')
     filter_horizontal = ('user_permissions',)
 
-    change_form_template = "admin/auth/user/change_form.html"
-    change_list_template = "admin/auth/user/change_list.html"
+    def get_hijack_user(self, obj):
+        return obj
 
 
 

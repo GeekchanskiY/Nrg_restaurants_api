@@ -89,7 +89,7 @@ def import_view(request):
     return render(request, "upload_file.html", {"upload_file_form": form})
 
 
-def export_view(request):
+def export_view(request) -> HttpResponse | FileResponse:
     if request.user.restaurant is None:
         return HttpResponse("Вы должны быть авторизованы с аккаунта администратора ресторана")
 

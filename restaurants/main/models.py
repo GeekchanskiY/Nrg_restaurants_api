@@ -80,32 +80,6 @@ class DishesCategory(models.Model):
     class Meta:
         verbose_name = "Категория блюд"
         verbose_name_plural = "Категории блюд"
-
-
-class DishSet(models.Model):
-    id = models.AutoField(primary_key=True)
-    name_ru = models.CharField(max_length=255, verbose_name="Название на русском")
-    name_en = models.CharField(max_length=255, verbose_name="Название на английском")
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, verbose_name="Ресторан")
-    dishes = models.ManyToManyField(Dish, verbose_name="Блюда")
-    image = models.ImageField(upload_to="images/dish_sets/", verbose_name="Изображение")
-
-    objects = models.Manager()
-
-    def image_tag(self):
-        return mark_safe(f'<img src="{self.image.url}" width="70" height="70" />')
-
-    image_tag.short_description = 'Image'
-
-    def __str__(self):
-        if self.name_ru is not None:
-            return self.name_ru
-        else:
-            return "None"
-
-    class Meta:
-        verbose_name = "Набор"
-        verbose_name_plural = "Наборы"
     
 
 class RestaurantImageCategory(models.Model):
