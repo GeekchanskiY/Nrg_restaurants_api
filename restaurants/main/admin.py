@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Restaurant, Dish, DishSet, DishesCategory, RestaurantImage, RestaurantImageCategory, Review, \
+from .models import Restaurant, Dish, DishesCategory, RestaurantImage, RestaurantImageCategory, Review, \
     AdminUser, News
 from django.core.exceptions import ValidationError
 from hijack.contrib.admin import HijackUserAdminMixin
